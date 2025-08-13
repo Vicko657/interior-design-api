@@ -1,1 +1,1 @@
-# interior-design-api
+# Interior Design Planning Api
