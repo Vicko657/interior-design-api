@@ -1,5 +1,89 @@
 package com.interiordesignplanner.entity;
 
+import java.time.Instant;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@EntityListeners(AuditingEntityListener.class) // Enables auditingentitylistener
+@Table(name = "clients")
 public class Client {
 
+    // Client | Instances
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Client's Id
+    protected String name; // Client's fullname
+    protected String email; // Client's email address
+    protected String phone; // Client's phone number
+    protected String address; // Client's address
+    protected String notes; // Notes specific for the Client
+
+    // JPA Auditing
+    @CreatedDate
+    private Instant createdAt; // Date the Client was added on the system
+    @LastModifiedDate
+    private Instant updatedAt; // Updates the date, each time the client's information is modified
+
+    // Client | Constructor
+    public Client(String name, String email, String phone, String address, String notes) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.notes = notes;
+
+    }
+
+    // Client | Parameterless constructor
+    public Client() {
+        this("fullname", "client@gmail.com", "01234567891", "No. address line, city, postcode", "additional details");
+    }
+
+    // Client | Getters
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getEmail() {
+        return this.phone;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public String getNotes() {
+        return this.notes;
+    }
+
+    // Client | Setters
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 }
