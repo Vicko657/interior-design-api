@@ -59,6 +59,10 @@ public class Client {
     }
 
     public String getEmail() {
+        return this.email;
+    }
+
+    public String getPhoneNo() {
         return this.phone;
     }
 
@@ -77,6 +81,10 @@ public class Client {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setPhoneNo(String phone) {
+        this.phone = phone;
     }
 
     public void setAddress(String address) {
