@@ -103,6 +103,10 @@ public class Project {
         return completedAt;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
     // Project | Setters
     public void setProjectName(String projectName) {
         this.projectName = projectName;
@@ -130,6 +134,10 @@ public class Project {
 
     public void setMeetingURL(String meetingURL) {
         this.meetingURL = meetingURL;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
 }
