@@ -22,7 +22,8 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Client's Id
-    protected String name; // Client's fullname
+    protected String firstName; // Client's fullname
+    protected String lastName; // Client's fullname
     protected String email; // Client's email address
     protected String phone; // Client's phone number
     protected String address; // Client's address
@@ -35,8 +36,9 @@ public class Client {
     private Instant updatedAt; // Updates the date, each time the client's information is modified
 
     // Client | Constructor
-    public Client(String name, String email, String phone, String address, String notes) {
-        this.name = name;
+    public Client(String firstName, String lastName, String email, String phone, String address, String notes) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.phone = phone;
         this.address = address;
@@ -46,7 +48,8 @@ public class Client {
 
     // Client | Parameterless constructor
     public Client() {
-        this("fullname", "client@gmail.com", "01234567891", "No. address line, city, postcode", "additional details");
+        this("firstname", "lastname", "client@gmail.com", "01234567891", "No. address line, city, postcode",
+                "additional details");
     }
 
     // Client | Getters
@@ -54,8 +57,12 @@ public class Client {
         return id;
     }
 
-    public String getName() {
-        return this.name;
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
     }
 
     public String getEmail() {
@@ -75,8 +82,12 @@ public class Client {
     }
 
     // Client | Setters
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void setEmail(String email) {

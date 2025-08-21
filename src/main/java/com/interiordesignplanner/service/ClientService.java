@@ -35,14 +35,14 @@ public class ClientService {
         if (client.getId() != null && this.clientRepository.existsById(client.getId())) {
             throw new OptimisticLockingFailureException("ID" + client.getId() + "was not found");
         }
-
         return this.clientRepository.save(client);
     }
 
     public Client updateClient(Long id, Client updateClient) throws NoSuchElementException {
         Client existingClientId = this.clientRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("ID" + id + "was not found"));
-        existingClientId.setName(updateClient.getName());
+        existingClientId.setFirstName(updateClient.getFirstName());
+        existingClientId.setLastName(updateClient.getLastName());
         existingClientId.setEmail(updateClient.getEmail());
         existingClientId.setPhoneNo(updateClient.getPhoneNo());
         existingClientId.setAddress(updateClient.getAddress());
@@ -52,7 +52,6 @@ public class ClientService {
     }
 
     public void deleteClient(Long id) {
-
         if (!this.clientRepository.existsById(id)) {
             throw new NoSuchElementException("ID" + id + "was not found");
         }
