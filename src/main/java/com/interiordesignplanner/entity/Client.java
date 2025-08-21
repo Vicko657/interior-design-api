@@ -37,6 +37,7 @@ public class Client {
     @LastModifiedDate
     private Instant updatedAt; // Updates the date, each time the client's information is modified
 
+    // Creates One to many relationship with Project table
     @OneToMany(mappedBy = "client")
     private List<Project> projects;
 
