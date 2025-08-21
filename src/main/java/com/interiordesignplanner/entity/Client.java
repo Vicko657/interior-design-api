@@ -1,6 +1,7 @@
 package com.interiordesignplanner.entity;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -11,6 +12,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -34,6 +36,9 @@ public class Client {
     private Instant createdAt; // Date the Client was added on the system
     @LastModifiedDate
     private Instant updatedAt; // Updates the date, each time the client's information is modified
+
+    @OneToMany(mappedBy = "client")
+    private List<Project> projects;
 
     // Client | Constructor
     public Client(String firstName, String lastName, String email, String phone, String address, String notes) {
