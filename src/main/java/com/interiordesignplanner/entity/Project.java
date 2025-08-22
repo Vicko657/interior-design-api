@@ -29,7 +29,7 @@ public class Project {
     private Long id; // Project's Id
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client; // Clients foreign key
 
     private String projectName; // The projects name
@@ -72,7 +72,7 @@ public class Project {
     }
 
     public String getProjectName() {
-        return this.projectName;
+        return projectName;
     }
 
     public ProjectStatus getProjectStatus() {
@@ -80,7 +80,7 @@ public class Project {
     }
 
     public Integer getBudget() {
-        return this.budget;
+        return budget;
     }
 
     public LocalDate getStartDate() {
@@ -92,11 +92,11 @@ public class Project {
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public String getMeetingURL() {
-        return this.meetingURL;
+        return meetingURL;
     }
 
     public Instant getCompletedAt() {

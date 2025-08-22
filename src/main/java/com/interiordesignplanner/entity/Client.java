@@ -64,27 +64,27 @@ public class Client {
     }
 
     public String getFirstName() {
-        return this.firstName;
+        return firstName;
     }
 
     public String getLastName() {
-        return this.lastName;
+        return lastName;
     }
 
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
     public String getPhoneNo() {
-        return this.phone;
+        return phone;
     }
 
     public String getAddress() {
-        return this.address;
+        return address;
     }
 
     public String getNotes() {
-        return this.notes;
+        return notes;
     }
 
     // Client | Setters
