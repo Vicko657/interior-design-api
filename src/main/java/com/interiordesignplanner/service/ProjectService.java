@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
+import com.interiordesignplanner.entity.Client;
 import com.interiordesignplanner.entity.Project;
 import com.interiordesignplanner.exception.ProjectNotFoundException;
 import com.interiordesignplanner.repository.ProjectRepository;
@@ -14,10 +15,11 @@ import com.interiordesignplanner.repository.ProjectRepository;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final ClientService clientService;
 
     public ProjectService(ProjectRepository projectRepository, ClientService clientService) {
         this.projectRepository = projectRepository;
-
+        this.clientService = clientService;
     }
 
     public List<Project> getAllProjects() {
@@ -29,14 +31,17 @@ public class ProjectService {
                 .orElseThrow(() -> new ProjectNotFoundException(id));
     }
 
-    public Project createProject(Project project) {
-        if (project == null) {
-            throw new IllegalArgumentException("Project must not be null");
+    public Project createProject(Project project, Long clientId) {
+        if (project == null && clientId == null) {
+            throw new IllegalArgumentException("Project and clientId must not be null");
         }
 
         if (project.getId() != null && projectRepository.existsById(project.getId())) {
             throw new OptimisticLockingFailureException("ID" + project.getId() + "was not found");
         }
+
+        Client client = clientService.getClient(clientId);
+        project.setClient(client);
         return projectRepository.save(project);
     }
 
@@ -55,6 +60,14 @@ public class ProjectService {
         Project project = getProject(id);
         projectRepository.deleteById(id);
         return project;
+    }
+
+    // Sets the Client to the project
+    public Project reassignClient(Long clientId, Long projectId) {
+        Project existingProjectId = getProject(projectId);
+        Client client = clientService.getClient(clientId);
+        existingProjectId.setClient(client);
+        return projectRepository.save(existingProjectId);
     }
 
 }
