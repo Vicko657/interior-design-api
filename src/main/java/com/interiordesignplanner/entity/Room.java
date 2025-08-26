@@ -116,6 +116,10 @@ public class Room {
         this.width = width;
     }
 
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     public void setChecklist(String checklist) {
         this.checklist = checklist;
     }
