@@ -30,7 +30,7 @@ public class ClientController {
 
     @GetMapping("/clients")
     public List<Client> getAllClients() {
-        return this.clientService.getAllClients();
+        return clientService.getAllClients();
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -38,7 +38,7 @@ public class ClientController {
     public Client createClient(@RequestBody Client client) {
 
         try {
-            return this.clientService.createClient(client);
+            return clientService.createClient(client);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (OptimisticLockingFailureException e) {
@@ -46,21 +46,21 @@ public class ClientController {
         }
     }
 
-    @PutMapping("clients/{id}")
+    @PutMapping("/clients/{id}")
     public Client updateClient(@PathVariable Long id, @RequestBody Client updateClient) {
 
         try {
-            return this.clientService.updateClient(id, updateClient);
+            return clientService.updateClient(id, updateClient);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
-    @DeleteMapping("clients/{id}")
+    @DeleteMapping("/clients/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteClient(@PathVariable Long id) {
         try {
-            this.clientService.deleteClient(id);
+            clientService.deleteClient(id);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }

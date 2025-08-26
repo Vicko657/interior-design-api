@@ -15,32 +15,31 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.interiordesignplanner.entity.Project;
+import com.interiordesignplanner.entity.Room;
 import com.interiordesignplanner.exception.ProjectNotFoundException;
-import com.interiordesignplanner.service.ProjectService;
+import com.interiordesignplanner.exception.RoomNotFoundException;
+import com.interiordesignplanner.service.RoomService;
 
 @RestController
-public class ProjectController {
+public class RoomController {
 
-    public ProjectService projectService;
+    public RoomService roomService;
 
-    public ProjectController(ProjectService projectService) {
-
-        this.projectService = projectService;
-
+    public RoomController(RoomService roomService) {
+        this.roomService = roomService;
     }
 
-    @GetMapping("/projects")
-    public List<Project> getAllProjects() {
-        return projectService.getAllProjects();
+    @GetMapping("/rooms")
+    public List<Room> getAllRooms() {
+        return roomService.getAllRooms();
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/projects/{clientId}")
-    public Project createProject(@RequestBody Project project, @PathVariable("clientId") Long clientId) {
+    @PostMapping("/rooms/{projectId}")
+    public Room addRoom(@RequestBody Room room, @PathVariable("projectId") Long projectId) {
 
         try {
-            return projectService.createProject(project, clientId);
+            return roomService.addRoom(room, projectId);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (OptimisticLockingFailureException e) {
@@ -48,31 +47,31 @@ public class ProjectController {
         }
     }
 
-    @PutMapping("/projects/{projectId}")
-    public Project updateProject(@PathVariable("projectId") Long projectId, @RequestBody Project updateProject) {
+    @PutMapping("/rooms/{roomId}")
+    public Room updateRoom(@PathVariable("roomId") Long roomId, @RequestBody Room updateRoom) {
 
         try {
-            return projectService.updateProject(projectId, updateProject);
+            return roomService.updateRoom(roomId, updateRoom);
+        } catch (RoomNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @PatchMapping("/rooms/{roomId}/projects/{projectId}")
+    public Room reassignProject(@PathVariable("roomId") Long roomId, @PathVariable("projectId") Long projectId) {
+
+        try {
+            return roomService.reassignProject(projectId, roomId);
         } catch (ProjectNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
-    @PatchMapping("/projects/{projectId}/clients/{clientId}")
-    public Project reassignClient(@PathVariable("projectId") Long projectId, @PathVariable("clientId") Long clientId) {
-
-        try {
-            return projectService.reassignClient(clientId, projectId);
-        } catch (ProjectNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        }
-    }
-
-    @DeleteMapping("/projects/{projectId}")
+    @DeleteMapping("/rooms/{roomId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteProject(@PathVariable("projectId") Long projectId) {
+    public void deleteProject(@PathVariable("roomId") Long roomId) {
         try {
-            projectService.deleteProject(projectId);
+            roomService.deleteRoom(roomId);
         } catch (ProjectNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
