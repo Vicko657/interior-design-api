@@ -40,6 +40,7 @@ public class ProjectService {
             throw new OptimisticLockingFailureException("ID" + project.getId() + "was not found");
         }
 
+        // Assiging Client Id to the project
         Client client = clientService.getClient(clientId);
         project.setClient(client);
         return projectRepository.save(project);
