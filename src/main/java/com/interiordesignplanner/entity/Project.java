@@ -16,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -31,6 +32,10 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client; // Clients foreign key
+
+    @OneToOne
+    @JoinColumn(name = "room_id", referencedColumnName = "id")
+    private Room room; // Room foreign key
 
     private String projectName; // The projects name
 
