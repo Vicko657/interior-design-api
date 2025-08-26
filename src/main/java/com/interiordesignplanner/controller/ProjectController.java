@@ -48,11 +48,11 @@ public class ProjectController {
         }
     }
 
-    @PutMapping("projects/{id}")
-    public Project updateProject(@PathVariable Long id, @RequestBody Project updateProject) {
+    @PutMapping("projects/{projectId}")
+    public Project updateProject(@PathVariable("projectId") Long projectId, @RequestBody Project updateProject) {
 
         try {
-            return this.projectService.updateProject(id, updateProject);
+            return this.projectService.updateProject(projectId, updateProject);
         } catch (ProjectNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
@@ -68,11 +68,11 @@ public class ProjectController {
         }
     }
 
-    @DeleteMapping("projects/{id}")
+    @DeleteMapping("projects/{projectId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteProject(@PathVariable Long id) {
+    public void deleteProject(@PathVariable("projectId") Long projectId) {
         try {
-            this.projectService.deleteProject(id);
+            this.projectService.deleteProject(projectId);
         } catch (ProjectNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
