@@ -49,7 +49,7 @@ public class RoomService {
 
     public Room updateRoom(Long id, Room room) {
         Room existingRoomId = getRoom(id);
-        existingRoomId.setRoomName(room.getRoomName());
+        existingRoomId.setType(room.getType());
         existingRoomId.setHeight(room.getHeight());
         existingRoomId.setLength(room.getLength());
         existingRoomId.setWidth(room.getWidth());

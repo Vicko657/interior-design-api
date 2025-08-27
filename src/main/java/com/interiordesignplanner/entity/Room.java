@@ -29,7 +29,7 @@ public class Room {
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project; // Project foreign key
 
-    private String roomName;
+    private String type;
     private Double length;
     private Double height;
     private Double width;
@@ -44,10 +44,10 @@ public class Room {
     private Instant updatedAt; // Updates the date, each time the room's information is modified
 
     // Room | Constructor
-    public Room(String roomName, Double length, Double height, Double width, String unit, String checklist,
+    public Room(String type, Double length, Double height, Double width, String unit, String checklist,
             String changes) {
 
-        this.roomName = roomName;
+        this.type = type;
         this.length = length;
         this.height = height;
         this.width = width;
@@ -59,7 +59,7 @@ public class Room {
 
     // Room | Parameterless constructor
     public Room() {
-        this("Room Name:", 7.5, 4.5, 5.5, "m", "Room checklist", "Room changes");
+        this("Type of Room:", 7.5, 4.5, 5.5, "m", "Room checklist", "Room changes");
     }
 
     // Room | Getters
@@ -67,8 +67,8 @@ public class Room {
         return id;
     }
 
-    public String getRoomName() {
-        return roomName;
+    public String getType() {
+        return type;
     }
 
     public Double getLength() {
@@ -100,8 +100,8 @@ public class Room {
     }
 
     // Room | Setters
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setLength(Double length) {
