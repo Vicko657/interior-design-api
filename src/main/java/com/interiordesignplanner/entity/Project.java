@@ -141,6 +141,10 @@ public class Project {
         this.meetingURL = meetingURL;
     }
 
+    public void setCompletedAt(Instant completedAt) {
+        this.completedAt = completedAt;
+    }
+
     public void setClient(Client client) {
         this.client = client;
     }

@@ -1,5 +1,6 @@
 package com.interiordesignplanner.service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.interiordesignplanner.entity.Client;
 import com.interiordesignplanner.entity.Project;
+import com.interiordesignplanner.entity.ProjectStatus;
 import com.interiordesignplanner.exception.ProjectNotFoundException;
 import com.interiordesignplanner.repository.ProjectRepository;
 
@@ -54,6 +56,13 @@ public class ProjectService {
         existingProjectId.setStartDate(project.getStartDate());
         existingProjectId.setMeetingURL(project.getMeetingURL());
         existingProjectId.setDueDate(project.getDueDate());
+
+        // When the Project Status changes to completed the completed date is set
+        if (existingProjectId.getProjectStatus() == ProjectStatus.COMPLETED
+                && existingProjectId.getCompletedAt() == null) {
+            existingProjectId.setCompletedAt(Instant.now());
+        }
+
         return projectRepository.save(existingProjectId);
     }
 
