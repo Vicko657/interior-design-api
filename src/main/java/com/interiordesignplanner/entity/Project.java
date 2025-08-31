@@ -25,7 +25,8 @@ public class Project extends AbstractEntity {
     @JsonBackReference
     private Client client; // Clients foreign key
 
-    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "room_id", referencedColumnName = "id")
     @JsonManagedReference
     private Room room; // Room foreign key
 

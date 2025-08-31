@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.interiordesignplanner.dto.RoomDTO;
 import com.interiordesignplanner.dto.RoomDTOMapper;
@@ -47,8 +48,9 @@ public class RoomService {
                 .orElseThrow(() -> new RoomNotFoundException(id));
     }
 
+    @Transactional
     public Room addRoom(Room room, Long projectId) {
-        if (room == null) {
+        if (room == null && projectId == null) {
             throw new IllegalArgumentException("Room must not be null");
         }
 
@@ -57,8 +59,12 @@ public class RoomService {
         }
         Project project = projectService.getProjectEntity(projectId);
 
+        project.setRoom(room);
         room.setProject(project);
-        return roomRepository.save(room);
+        projectService.saveProjectEntity(project);
+
+        return room;
+
     }
 
     public Room updateRoom(Long id, Room room) {
@@ -75,9 +81,6 @@ public class RoomService {
 
     public Room deleteRoom(Long id) {
         Room room = getRoomEntity(id);
-        if (room.getProject() != null) {
-            room.getProject().setRoom(null);
-        }
         roomRepository.deleteById(id);
         return room;
     }
@@ -86,6 +89,7 @@ public class RoomService {
 
         Room existingRoomId = getRoomEntity(roomId);
         Project project = projectService.getProjectEntity(projectId);
+        project.setRoom(existingRoomId);
         existingRoomId.setProject(project);
         return roomRepository.save(existingRoomId);
     }

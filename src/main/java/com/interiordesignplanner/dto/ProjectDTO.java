@@ -6,15 +6,15 @@ import java.time.LocalDate;
 import com.interiordesignplanner.entity.ProjectStatus;
 
 public record ProjectDTO(Long id,
-        Long clientId,
-        String clientName,
-        String projectName,
-        ProjectStatus status,
-        Integer budget,
-        LocalDate startDate,
-        LocalDate dueDate,
-        String description,
-        String meetingURL,
-        Instant completedAt,
-        Long roomId) {
+                Long clientId,
+                String clientName,
+                String projectName,
+                ProjectStatus status,
+                Integer budget,
+                LocalDate startDate,
+                LocalDate dueDate,
+                String description,
+                String meetingURL,
+                Instant completedAt,
+                Long roomId) {
 }

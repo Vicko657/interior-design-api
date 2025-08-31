@@ -12,7 +12,13 @@ public class ProjectDTOMapper implements Function<Project, ProjectDTO> {
     @Override
     public ProjectDTO apply(Project project) {
 
-        Long roomId = project.getRoom() != null ? project.getRoom().getId() : null;
+        Long roomId = null;
+
+        if (project.getRoom() != null) {
+            roomId = project.getRoom().getId();
+        } else {
+            roomId = null;
+        }
 
         return new ProjectDTO(
                 project.getId(),

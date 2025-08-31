@@ -16,6 +16,8 @@ import com.interiordesignplanner.entity.ProjectStatus;
 import com.interiordesignplanner.exception.ProjectNotFoundException;
 import com.interiordesignplanner.repository.ProjectRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ProjectService {
 
@@ -93,6 +95,11 @@ public class ProjectService {
         Client client = clientService.getClientEntity(clientId);
         existingProjectId.setClient(client);
         return projectRepository.save(existingProjectId);
+    }
+
+    @Transactional
+    public Project saveProjectEntity(Project project) {
+        return projectRepository.save(project);
     }
 
 }

@@ -3,7 +3,6 @@ package com.interiordesignplanner.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -12,8 +11,7 @@ import jakarta.persistence.Table;
 public class Room extends AbstractEntity {
 
     // Room | Instances
-    @OneToOne
-    @JoinColumn(name = "project_id")
+    @OneToOne(mappedBy = "room")
     @JsonBackReference
     private Project project; // Project foreign key
 
