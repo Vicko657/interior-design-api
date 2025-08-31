@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,6 @@ import com.interiordesignplanner.dto.ProjectDTOMapper;
 import com.interiordesignplanner.entity.Client;
 import com.interiordesignplanner.entity.Project;
 import com.interiordesignplanner.entity.ProjectStatus;
-import com.interiordesignplanner.entity.Room;
 import com.interiordesignplanner.exception.ProjectNotFoundException;
 import com.interiordesignplanner.repository.ProjectRepository;
 
@@ -23,15 +21,12 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ClientService clientService;
-    private final RoomService roomService;
     private final ProjectDTOMapper projectDTOMapper;
 
-    public ProjectService(ProjectRepository projectRepository, ClientService clientService,
-            @Lazy RoomService roomService,
-            ProjectDTOMapper projectDTOMapper) {
+    public ProjectService(ProjectRepository projectRepository,
+            ProjectDTOMapper projectDTOMapper, ClientService clientService) {
         this.projectRepository = projectRepository;
         this.clientService = clientService;
-        this.roomService = roomService;
         this.projectDTOMapper = projectDTOMapper;
     }
 
@@ -48,26 +43,22 @@ public class ProjectService {
                 .orElseThrow(() -> new ProjectNotFoundException(id));
     }
 
-    public Project getProjectEntity(Long id) throws NoSuchElementException {
-        return projectRepository.findById(id)
-                .orElseThrow(() -> new ProjectNotFoundException(id));
-    }
-
-    public Project createProject(Project project, Long roomId) {
-        if (project == null && roomId == null) {
-            throw new IllegalArgumentException("Project and clientId must not be null");
+    public Project createProject(Project project, Long clientId) {
+        if (project == null) {
+            throw new IllegalArgumentException("Project must not be null");
         }
 
         if (project.getId() != null && projectRepository.existsById(project.getId())) {
             throw new OptimisticLockingFailureException("ID" + project.getId() + "was not found");
         }
-
-        // Assiging Client Id and Room Id to the project
-        Room room = roomService.getRoomEntity(roomId);
-
-        project.setRoom(room);
+        Client client = clientService.getClientEntity(clientId);
+        project.setClient(client);
         return projectRepository.save(project);
+    }
 
+    public Project getProjectEntity(Long id) throws NoSuchElementException {
+        return projectRepository.findById(id)
+                .orElseThrow(() -> new ProjectNotFoundException(id));
     }
 
     public Project updateProject(Long id, Project project) {
@@ -79,6 +70,7 @@ public class ProjectService {
         existingProjectId.setStartDate(project.getStartDate());
         existingProjectId.setMeetingURL(project.getMeetingURL());
         existingProjectId.setDueDate(project.getDueDate());
+        existingProjectId.setClient(project.getClient());
 
         // When the Project Status changes to completed the completed date is set
         if (existingProjectId.getProjectStatus() == ProjectStatus.COMPLETED

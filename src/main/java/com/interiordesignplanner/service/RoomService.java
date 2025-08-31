@@ -17,14 +17,15 @@ import com.interiordesignplanner.repository.RoomRepository;
 @Service
 public class RoomService {
 
-    private final RoomRepository roomRepository;
     private final ProjectService projectService;
+    private final RoomRepository roomRepository;
     private final RoomDTOMapper roomDTOMapper;
 
-    public RoomService(RoomRepository roomRepository, ProjectService projectService, RoomDTOMapper roomDTOMapper) {
+    public RoomService(RoomRepository roomRepository, RoomDTOMapper roomDTOMapper,
+            ProjectService projectService) {
         this.roomRepository = roomRepository;
-        this.projectService = projectService;
         this.roomDTOMapper = roomDTOMapper;
+        this.projectService = projectService;
 
     }
 
@@ -47,16 +48,15 @@ public class RoomService {
     }
 
     public Room addRoom(Room room, Long projectId) {
-        if (room == null && projectId == null) {
-            throw new IllegalArgumentException("Room and projectId must not be null");
+        if (room == null) {
+            throw new IllegalArgumentException("Room must not be null");
         }
 
         if (room.getId() != null && roomRepository.existsById(room.getId())) {
             throw new OptimisticLockingFailureException("ID" + room.getId() + "was not found");
         }
-
-        // Assiging Project Id to the project
         Project project = projectService.getProjectEntity(projectId);
+
         room.setProject(project);
         return roomRepository.save(room);
     }
@@ -75,12 +75,15 @@ public class RoomService {
 
     public Room deleteRoom(Long id) {
         Room room = getRoomEntity(id);
+        if (room.getProject() != null) {
+            room.getProject().setRoom(null);
+        }
         roomRepository.deleteById(id);
         return room;
     }
 
-    // Sets the Project to the room
     public Room reassignProject(Long projectId, Long roomId) {
+
         Room existingRoomId = getRoomEntity(roomId);
         Project project = projectService.getProjectEntity(projectId);
         existingRoomId.setProject(project);

@@ -38,11 +38,10 @@ public class ProjectController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/projects/{clientId}")
-    public Project createProject(@RequestBody Project project, @PathVariable("clientId") Long clientId,
-            @PathVariable("roomId") Long roomId) {
+    public Project createProject(@RequestBody Project project, @PathVariable("clientId") Long clientId) {
 
         try {
-            return projectService.createProject(project, roomId);
+            return projectService.createProject(project, clientId);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (OptimisticLockingFailureException e) {

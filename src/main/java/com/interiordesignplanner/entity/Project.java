@@ -3,6 +3,9 @@ package com.interiordesignplanner.entity;
 import java.time.Instant;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,9 +22,11 @@ public class Project extends AbstractEntity {
     // Project | Instances
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
+    @JsonBackReference
     private Client client; // Clients foreign key
 
     @OneToOne(mappedBy = "project", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Room room; // Room foreign key
 
     private String projectName; // The projects name

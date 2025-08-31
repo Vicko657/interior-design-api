@@ -2,6 +2,8 @@ package com.interiordesignplanner.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -20,6 +22,7 @@ public class Client extends AbstractEntity {
 
     // Creates One to many relationship with Project table
     @OneToMany(mappedBy = "client")
+    @JsonManagedReference
     private List<Project> projects;
 
     // Client | Constructor
