@@ -42,7 +42,7 @@ public class RoomService {
         }
 
         // Assiging Project Id to the project
-        Project project = projectService.getProject(projectId);
+        Project project = projectService.getProjectEntity(projectId);
         room.setProject(project);
         return roomRepository.save(room);
     }
@@ -68,7 +68,7 @@ public class RoomService {
     // Sets the Project to the room
     public Room reassignProject(Long projectId, Long roomId) {
         Room existingRoomId = getRoom(roomId);
-        Project project = projectService.getProject(projectId);
+        Project project = projectService.getProjectEntity(projectId);
         existingRoomId.setProject(project);
         return roomRepository.save(existingRoomId);
     }

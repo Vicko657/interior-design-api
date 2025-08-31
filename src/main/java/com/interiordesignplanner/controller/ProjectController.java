@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.interiordesignplanner.dto.ProjectDTO;
 import com.interiordesignplanner.entity.Project;
 import com.interiordesignplanner.exception.ProjectNotFoundException;
 import com.interiordesignplanner.service.ProjectService;
@@ -31,7 +32,7 @@ public class ProjectController {
     }
 
     @GetMapping("/projects")
-    public List<Project> getAllProjects() {
+    public List<ProjectDTO> getAllProjects() {
         return projectService.getAllProjects();
     }
 

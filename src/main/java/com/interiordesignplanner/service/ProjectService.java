@@ -3,10 +3,13 @@ package com.interiordesignplanner.service;
 import java.time.Instant;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
+import com.interiordesignplanner.dto.ProjectDTO;
+import com.interiordesignplanner.dto.ProjectDTOMapper;
 import com.interiordesignplanner.entity.Client;
 import com.interiordesignplanner.entity.Project;
 import com.interiordesignplanner.entity.ProjectStatus;
@@ -18,17 +21,29 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ClientService clientService;
+    private final ProjectDTOMapper projectDTOMapper;
 
-    public ProjectService(ProjectRepository projectRepository, ClientService clientService) {
+    public ProjectService(ProjectRepository projectRepository, ClientService clientService,
+            ProjectDTOMapper projectDTOMapper) {
         this.projectRepository = projectRepository;
         this.clientService = clientService;
+        this.projectDTOMapper = projectDTOMapper;
     }
 
-    public List<Project> getAllProjects() {
-        return projectRepository.findAll();
+    public List<ProjectDTO> getAllProjects() {
+        return projectRepository.findAll()
+                .stream()
+                .map(projectDTOMapper)
+                .collect(Collectors.toList());
     }
 
-    public Project getProject(Long id) throws NoSuchElementException {
+    public ProjectDTO getProject(Long id) throws NoSuchElementException {
+        return projectRepository.findById(id)
+                .map(projectDTOMapper)
+                .orElseThrow(() -> new ProjectNotFoundException(id));
+    }
+
+    public Project getProjectEntity(Long id) throws NoSuchElementException {
         return projectRepository.findById(id)
                 .orElseThrow(() -> new ProjectNotFoundException(id));
     }
@@ -49,7 +64,9 @@ public class ProjectService {
     }
 
     public Project updateProject(Long id, Project project) {
-        Project existingProjectId = getProject(id);
+        Project existingProjectId = projectRepository.findById(id)
+                .orElseThrow(() -> new ProjectNotFoundException(id));
+        ;
         existingProjectId.setProjectName(project.getProjectName());
         existingProjectId.setBudget(project.getBudget());
         existingProjectId.setProjectStatus(project.getProjectStatus());
@@ -67,14 +84,17 @@ public class ProjectService {
     }
 
     public Project deleteProject(Long id) {
-        Project project = getProject(id);
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new ProjectNotFoundException(id));
         projectRepository.deleteById(id);
         return project;
     }
 
     // Sets the Client to the project
     public Project reassignClient(Long clientId, Long projectId) {
-        Project existingProjectId = getProject(projectId);
+        Project existingProjectId = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectNotFoundException(projectId));
+        ;
         Client client = clientService.getClient(clientId);
         existingProjectId.setClient(client);
         return projectRepository.save(existingProjectId);
