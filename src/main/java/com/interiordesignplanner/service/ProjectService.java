@@ -58,7 +58,7 @@ public class ProjectService {
         }
 
         // Assiging Client Id to the project
-        Client client = clientService.getClient(clientId);
+        Client client = clientService.getClientEntity(clientId);
         project.setClient(client);
         return projectRepository.save(project);
     }
@@ -91,7 +91,7 @@ public class ProjectService {
     // Sets the Client to the project
     public Project reassignClient(Long clientId, Long projectId) {
         Project existingProjectId = getProjectEntity(projectId);
-        Client client = clientService.getClient(clientId);
+        Client client = clientService.getClientEntity(clientId);
         existingProjectId.setClient(client);
         return projectRepository.save(existingProjectId);
     }

@@ -69,6 +69,10 @@ public class Client extends AbstractEntity {
         return notes;
     }
 
+    public List<Project> getProject() {
+        return projects;
+    }
+
     // Client | Setters
     public void setFirstName(String firstName) {
         this.firstName = firstName;

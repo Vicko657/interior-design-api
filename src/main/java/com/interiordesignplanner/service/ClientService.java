@@ -1,10 +1,13 @@
 package com.interiordesignplanner.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
+import com.interiordesignplanner.dto.ClientDTO;
+import com.interiordesignplanner.dto.ClientDTOMapper;
 import com.interiordesignplanner.entity.Client;
 import com.interiordesignplanner.exception.ClientNotFoundException;
 import com.interiordesignplanner.repository.ClientRepository;
@@ -13,16 +16,27 @@ import com.interiordesignplanner.repository.ClientRepository;
 public class ClientService {
 
     public ClientRepository clientRepository;
+    private final ClientDTOMapper clientDTOMapper;
 
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, ClientDTOMapper clientDTOMapper) {
         this.clientRepository = clientRepository;
+        this.clientDTOMapper = clientDTOMapper;
     }
 
-    public List<Client> getAllClients() {
-        return clientRepository.findAll();
+    public List<ClientDTO> getAllClients() {
+        return clientRepository.findAll()
+                .stream()
+                .map(clientDTOMapper)
+                .collect(Collectors.toList());
     }
 
-    public Client getClient(Long id) {
+    public ClientDTO getClient(Long id) {
+        return clientRepository.findById(id)
+                .map(clientDTOMapper)
+                .orElseThrow(() -> new ClientNotFoundException(id));
+    }
+
+    public Client getClientEntity(Long id) {
         return clientRepository.findById(id)
                 .orElseThrow(() -> new ClientNotFoundException(id));
     }
@@ -39,7 +53,7 @@ public class ClientService {
     }
 
     public Client updateClient(Long id, Client updateClient) {
-        Client existingClientId = getClient(id);
+        Client existingClientId = getClientEntity(id);
         existingClientId.setFirstName(updateClient.getFirstName());
         existingClientId.setLastName(updateClient.getLastName());
         existingClientId.setEmail(updateClient.getEmail());
@@ -51,7 +65,7 @@ public class ClientService {
     }
 
     public Client deleteClient(Long id) {
-        Client client = getClient(id);
+        Client client = getClientEntity(id);
         clientRepository.deleteById(id);
         return client;
     }

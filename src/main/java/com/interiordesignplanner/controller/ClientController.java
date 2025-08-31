@@ -3,6 +3,7 @@ package com.interiordesignplanner.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.interiordesignplanner.dto.ClientDTO;
 import com.interiordesignplanner.entity.Client;
 import com.interiordesignplanner.service.ClientService;
 
@@ -29,7 +30,7 @@ public class ClientController {
     }
 
     @GetMapping("/clients")
-    public List<Client> getAllClients() {
+    public List<ClientDTO> getAllClients() {
         return clientService.getAllClients();
     }
 
