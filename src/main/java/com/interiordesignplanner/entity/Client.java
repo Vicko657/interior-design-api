@@ -1,41 +1,22 @@
 package com.interiordesignplanner.entity;
 
-import java.time.Instant;
 import java.util.List;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class) // Enables auditingentitylistener
 @Table(name = "clients")
-public class Client {
+public class Client extends AbstractEntity {
 
     // Client | Instances
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Client's Id
     protected String firstName; // Client's fullname
     protected String lastName; // Client's fullname
     protected String email; // Client's email address
     protected String phone; // Client's phone number
     protected String address; // Client's address
     protected String notes; // Notes specific for the Client
-
-    // JPA Auditing
-    @CreatedDate
-    private Instant createdAt; // Date the Client was added on the system
-    @LastModifiedDate
-    private Instant updatedAt; // Updates the date, each time the client's information is modified
 
     // Creates One to many relationship with Project table
     @OneToMany(mappedBy = "client")
@@ -49,7 +30,6 @@ public class Client {
         this.phone = phone;
         this.address = address;
         this.notes = notes;
-
     }
 
     // Client | Parameterless constructor
@@ -59,8 +39,10 @@ public class Client {
     }
 
     // Client | Getters
+
+    @Override
     public Long getId() {
-        return id;
+        return super.getId();
     }
 
     public String getFirstName() {

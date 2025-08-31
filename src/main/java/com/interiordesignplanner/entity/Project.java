@@ -3,32 +3,19 @@ package com.interiordesignplanner.entity;
 import java.time.Instant;
 import java.time.LocalDate;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "projects")
-public class Project {
+public class Project extends AbstractEntity {
 
     // Project | Instances
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Project's Id
-
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client; // Clients foreign key
@@ -50,12 +37,6 @@ public class Project {
     private String meetingURL; // The meeting link - gmeets
     private Instant completedAt; // The date the project is completed
 
-    // JPA Auditing
-    @CreatedDate
-    private Instant createdAt; // Date the Project was added on the system
-    @LastModifiedDate
-    private Instant updatedAt; // Updates the date, each time the project's information is modified
-
     // Project | Constructor
     public Project(String projectName, Integer budget, String description, String meetingURL) {
 
@@ -73,7 +54,7 @@ public class Project {
 
     // Project | Getters
     public Long getId() {
-        return id;
+        return super.getId();
     }
 
     public String getProjectName() {
