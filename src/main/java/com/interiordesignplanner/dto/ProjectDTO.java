@@ -5,7 +5,11 @@ import java.time.LocalDate;
 
 import com.interiordesignplanner.entity.ProjectStatus;
 
-public record ProjectDTO(Long id, String clientName, String projectName, ProjectStatus status, Integer budget,
+public record ProjectDTO(Long id,
+        String clientName,
+        String projectName,
+        ProjectStatus status,
+        Integer budget,
         LocalDate startDate,
         LocalDate dueDate,
         String description,

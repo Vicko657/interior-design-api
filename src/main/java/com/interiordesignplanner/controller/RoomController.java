@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.interiordesignplanner.dto.RoomDTO;
 import com.interiordesignplanner.entity.Room;
 import com.interiordesignplanner.exception.ProjectNotFoundException;
 import com.interiordesignplanner.exception.RoomNotFoundException;
@@ -30,7 +31,7 @@ public class RoomController {
     }
 
     @GetMapping("/rooms")
-    public List<Room> getAllRooms() {
+    public List<RoomDTO> getAllRooms() {
         return roomService.getAllRooms();
     }
 

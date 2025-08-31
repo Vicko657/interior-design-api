@@ -64,8 +64,7 @@ public class ProjectService {
     }
 
     public Project updateProject(Long id, Project project) {
-        Project existingProjectId = projectRepository.findById(id)
-                .orElseThrow(() -> new ProjectNotFoundException(id));
+        Project existingProjectId = getProjectEntity(id);
         ;
         existingProjectId.setProjectName(project.getProjectName());
         existingProjectId.setBudget(project.getBudget());
@@ -84,17 +83,14 @@ public class ProjectService {
     }
 
     public Project deleteProject(Long id) {
-        Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new ProjectNotFoundException(id));
+        Project project = getProjectEntity(id);
         projectRepository.deleteById(id);
         return project;
     }
 
     // Sets the Client to the project
     public Project reassignClient(Long clientId, Long projectId) {
-        Project existingProjectId = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ProjectNotFoundException(projectId));
-        ;
+        Project existingProjectId = getProjectEntity(projectId);
         Client client = clientService.getClient(clientId);
         existingProjectId.setClient(client);
         return projectRepository.save(existingProjectId);
