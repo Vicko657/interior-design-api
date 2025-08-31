@@ -13,6 +13,7 @@ public class ProjectDTOMapper implements Function<Project, ProjectDTO> {
     public ProjectDTO apply(Project project) {
         return new ProjectDTO(
                 project.getId(),
+                project.getClient().getId(),
                 project.getClient().getFirstName() + " " + project.getClient().getLastName(),
                 project.getProjectName(),
                 project.getProjectStatus(),

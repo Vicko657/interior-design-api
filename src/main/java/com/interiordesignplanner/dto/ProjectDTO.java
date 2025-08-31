@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import com.interiordesignplanner.entity.ProjectStatus;
 
 public record ProjectDTO(Long id,
+        Long clientId,
         String clientName,
         String projectName,
         ProjectStatus status,
