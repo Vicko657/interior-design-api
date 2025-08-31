@@ -11,6 +11,9 @@ public class ProjectDTOMapper implements Function<Project, ProjectDTO> {
 
     @Override
     public ProjectDTO apply(Project project) {
+
+        Long roomId = project.getRoom() != null ? project.getRoom().getId() : null;
+
         return new ProjectDTO(
                 project.getId(),
                 project.getClient().getId(),
@@ -22,7 +25,8 @@ public class ProjectDTOMapper implements Function<Project, ProjectDTO> {
                 project.getDueDate(),
                 project.getDescription(),
                 project.getMeetingURL(),
-                project.getCompletedAt());
+                project.getCompletedAt(),
+                roomId);
     }
 
 }

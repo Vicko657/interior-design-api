@@ -15,5 +15,6 @@ public record ProjectDTO(Long id,
         LocalDate dueDate,
         String description,
         String meetingURL,
-        Instant completedAt) {
+        Instant completedAt,
+        Long roomId) {
 }

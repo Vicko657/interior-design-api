@@ -11,7 +11,7 @@ public class Room extends AbstractEntity {
 
     // Room | Instances
     @OneToOne
-    @JoinColumn(name = "project_id", referencedColumnName = "id")
+    @JoinColumn(name = "project_id")
     private Project project; // Project foreign key
 
     private String type;

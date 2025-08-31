@@ -3,6 +3,7 @@ package com.interiordesignplanner.entity;
 import java.time.Instant;
 import java.time.LocalDate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,8 +21,7 @@ public class Project extends AbstractEntity {
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client; // Clients foreign key
 
-    @OneToOne
-    @JoinColumn(name = "room_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL)
     private Room room; // Room foreign key
 
     private String projectName; // The projects name
@@ -93,6 +93,10 @@ public class Project extends AbstractEntity {
         return client;
     }
 
+    public Room getRoom() {
+        return room;
+    }
+
     // Project | Setters
     public void setProjectName(String projectName) {
         this.projectName = projectName;
@@ -128,6 +132,10 @@ public class Project extends AbstractEntity {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
 }
