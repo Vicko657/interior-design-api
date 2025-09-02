@@ -1,0 +1,93 @@
+package com.interiordesignplanner.room;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.interiordesignplanner.project.Project;
+import com.interiordesignplanner.project.ProjectService;
+
+@Service
+public class RoomService {
+
+    private final ProjectService projectService;
+    private final RoomRepository roomRepository;
+    private final RoomDTOMapper roomDTOMapper;
+
+    public RoomService(RoomRepository roomRepository, RoomDTOMapper roomDTOMapper,
+            ProjectService projectService) {
+        this.roomRepository = roomRepository;
+        this.roomDTOMapper = roomDTOMapper;
+        this.projectService = projectService;
+
+    }
+
+    public List<RoomDTO> getAllRooms() {
+        return roomRepository.findAll()
+                .stream()
+                .map(roomDTOMapper)
+                .collect(Collectors.toList());
+    }
+
+    public RoomDTO getRoom(Long id) throws NoSuchElementException {
+        return roomRepository.findById(id)
+                .map(roomDTOMapper)
+                .orElseThrow(() -> new RoomNotFoundException(id));
+    }
+
+    public Room getRoomEntity(Long id) throws NoSuchElementException {
+        return roomRepository.findById(id)
+                .orElseThrow(() -> new RoomNotFoundException(id));
+    }
+
+    @Transactional
+    public Room addRoom(Room room, Long projectId) {
+        if (room == null && projectId == null) {
+            throw new IllegalArgumentException("Room must not be null");
+        }
+
+        if (room.getId() != null && roomRepository.existsById(room.getId())) {
+            throw new OptimisticLockingFailureException("ID" + room.getId() + "was not found");
+        }
+        Project project = projectService.getProjectEntity(projectId);
+
+        project.setRoom(room);
+        room.setProject(project);
+        projectService.saveProjectEntity(project);
+
+        return room;
+
+    }
+
+    public Room updateRoom(Long id, Room room) {
+        Room existingRoomId = getRoomEntity(id);
+        existingRoomId.setType(room.getType());
+        existingRoomId.setHeight(room.getHeight());
+        existingRoomId.setLength(room.getLength());
+        existingRoomId.setWidth(room.getWidth());
+        existingRoomId.setUnit(room.getUnit());
+        existingRoomId.setChecklist(room.getChecklist());
+        existingRoomId.setChanges(room.getChanges());
+        return roomRepository.save(existingRoomId);
+    }
+
+    public Room deleteRoom(Long id) {
+        Room room = getRoomEntity(id);
+        roomRepository.deleteById(id);
+        return room;
+    }
+
+    public Room reassignProject(Long projectId, Long roomId) {
+
+        Room existingRoomId = getRoomEntity(roomId);
+        Project project = projectService.getProjectEntity(projectId);
+        project.setRoom(existingRoomId);
+        existingRoomId.setProject(project);
+        return roomRepository.save(existingRoomId);
+    }
+
+}
