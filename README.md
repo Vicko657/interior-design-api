@@ -1,12 +1,12 @@
 # Interior Design Planner API 🏚️🏠
 
-A lightweight planner that helps **Interior Designers** to organise projects from planning to completion for their clients. The REST API allows the designers to track clients details, projects, tasks, timelines and room specifications.
+A lightweight planner that helps **Interior designers** to organise projects from planning to completion for their clients. The REST API allows the designers to track clients details, projects, tasks, timelines and room specifications.
 
 ## 📝 Main Features
 
-- **Client** Management - CRUD functionalities to access client details.
-- **Project** Management - CRUD functionalities to help manage projects with a budget, deadlines, status and meeting links.
-- **Room** Management - CRUD functionalities to define rooms with dimensions, room type and design changes and checklists.
+- **Client Management** - CRUD functionalities to access client details.
+- **Project Management** - CRUD functionalities to help manage projects with a budget, deadlines, status and meeting links.
+- **Room Management** - CRUD functionalities to define rooms with dimensions, room type and design changes and checklists.
 - **Status Tracking** - Use of enums to track project stages i.e PLANNING, COMPLETED, ARCHIVED...
 - **Audit Logging** - Automatically notes the dates when projects are completed and when clients details, projects and rooms are created or updated.
 
@@ -68,5 +68,11 @@ cd interior-design-api
 ```
 
 ## 🛋️ API Documentation
+
+When the API is running you can check the **Swagger UI** documentation through this link:
+
+```
+http://localhost:8080/swagger-ui/index.html#/
+```
 
 ## 🏘️ API Endpoints
