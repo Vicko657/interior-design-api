@@ -3,6 +3,9 @@ package com.interiordesignplanner.client;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -25,11 +28,15 @@ public class ClientController {
         this.clientService = clientService;
     }
 
+    @Tag(name = "clients", description = "Information about the clients")
+    @Operation(summary = "Retrieves all clients", description = "Retrieves all the clients details, including their name, email, phoneNo, address, projects and other details")
     @GetMapping("/clients")
     public List<ClientDTO> getAllClients() {
         return clientService.getAllClients();
     }
 
+    @Tag(name = "clients", description = "Information about the clients")
+    @Operation(summary = "Create a new client", description = "Creates a new client and add's their details")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/clients")
     public Client createClient(@RequestBody Client client) {
@@ -43,6 +50,8 @@ public class ClientController {
         }
     }
 
+    @Tag(name = "clients", description = "Information about the clients")
+    @Operation(summary = "Update client", description = "Updates the client's records")
     @PutMapping("/clients/{id}")
     public Client updateClient(@PathVariable Long id, @RequestBody Client updateClient) {
 
@@ -53,6 +62,8 @@ public class ClientController {
         }
     }
 
+    @Tag(name = "clients", description = "Information about the clients")
+    @Operation(summary = "Deletes client", description = "Deletes the client's records")
     @DeleteMapping("/clients/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteClient(@PathVariable Long id) {
