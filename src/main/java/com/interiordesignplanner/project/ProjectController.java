@@ -1,6 +1,7 @@
 package com.interiordesignplanner.project;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,18 @@ public class ProjectController {
     public ProjectController(ProjectService projectService) {
 
         this.projectService = projectService;
+
+    }
+
+    @Tag(name = "projects", description = "Client's Project directory")
+    @Operation(summary = "Finds project by ID", description = "Returns one project, including their name, the budget, project status, start date, deadline and meeting links")
+    @GetMapping(value = "/clients/{id}")
+    public ProjectDTO getProject(@PathVariable Long id) {
+        try {
+            return projectService.getProject(id);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
 
     }
 
