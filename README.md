@@ -61,7 +61,7 @@ cd interior-design-api
 ./mvnw spring-boot:run
 ```
 
-## 📏 📐 Use to run the tests
+## 📏 📐 Used to run the tests
 
 ```
 ./mvnw clean test
