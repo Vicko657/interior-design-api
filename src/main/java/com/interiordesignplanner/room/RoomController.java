@@ -17,6 +17,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.interiordesignplanner.project.ProjectNotFoundException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 public class RoomController {
 
@@ -26,11 +29,15 @@ public class RoomController {
         this.roomService = roomService;
     }
 
+    @Tag(name = "rooms", description = "Project's Room specification")
+    @Operation(summary = "Retrieves all of the rooms", description = "Returns all the room specification, including the client and project it is linked to, roomType, roomSize, checkList of tasks, changes to the room")
     @GetMapping("/rooms")
     public List<RoomDTO> getAllRooms() {
         return roomService.getAllRooms();
     }
 
+    @Tag(name = "rooms", description = "Project's Room specification")
+    @Operation(summary = "Adds a room to the project", description = "Creates a room with specifications for the project")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/rooms/{projectId}")
     public Room addRoom(@RequestBody Room room, @PathVariable("projectId") Long projectId) {
@@ -44,6 +51,8 @@ public class RoomController {
         }
     }
 
+    @Tag(name = "rooms", description = "Project's Room specification")
+    @Operation(summary = "Updates room", description = "Updates the room's specification")
     @PutMapping("/rooms/{roomId}")
     public Room updateRoom(@PathVariable("roomId") Long roomId, @RequestBody Room updateRoom) {
 
@@ -54,6 +63,8 @@ public class RoomController {
         }
     }
 
+    @Tag(name = "rooms", description = "Project's Room specification")
+    @Operation(summary = "Reassigns room to a different project", description = "Updates to a different project for the room")
     @PatchMapping("/rooms/{roomId}/projects/{projectId}")
     public Room reassignProject(@PathVariable("roomId") Long roomId, @PathVariable("projectId") Long projectId) {
 
@@ -64,6 +75,8 @@ public class RoomController {
         }
     }
 
+    @Tag(name = "rooms", description = "Project's Room specification")
+    @Operation(summary = "Deletes room", description = "Deletes the room and its specifications")
     @DeleteMapping("/rooms/{roomId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteProject(@PathVariable("roomId") Long roomId) {
