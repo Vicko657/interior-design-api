@@ -34,6 +34,20 @@ public class ProjectService {
                 .collect(Collectors.toList());
     }
 
+    public List<Project> getProjectStatus(String status) {
+
+        ProjectStatus[] statusValues = ProjectStatus.values();
+
+        for (ProjectStatus status1 : statusValues) {
+            if (status1.name().equalsIgnoreCase(status)) {
+                return projectRepository.getByStatus(status1);
+            }
+        }
+
+        return null;
+
+    }
+
     public ProjectDTO getProject(Long id) throws NoSuchElementException {
         return projectRepository.findById(id)
                 .map(projectDTOMapper)

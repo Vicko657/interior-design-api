@@ -32,7 +32,7 @@ public class ProjectController {
 
     @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Finds project by ID", description = "Returns one project, including their name, the budget, project status, start date, deadline and meeting links")
-    @GetMapping(value = "/clients/{id}")
+    @GetMapping(value = "/projects/{id}")
     public ProjectDTO getProject(@PathVariable Long id) {
         try {
             return projectService.getProject(id);
@@ -86,6 +86,13 @@ public class ProjectController {
         } catch (ProjectNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
+    }
+
+    @Tag(name = "projects", description = "Client's Project directory")
+    @Operation(summary = "Finds project by status", description = "Returns the projects that have the same status")
+    @GetMapping("projects/status/{status}")
+    public List<Project> getProjectStatus(@PathVariable("status") String status) {
+        return projectService.getProjectStatus(status);
     }
 
     @Tag(name = "projects", description = "Client's Project directory")
