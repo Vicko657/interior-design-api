@@ -58,6 +58,7 @@ public class Project extends AbstractEntity {
 
     // Project | Parameterless constructor
     public Project() {
+
     }
 
     // Project | Getters
