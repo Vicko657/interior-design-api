@@ -61,7 +61,7 @@ cd interior-design-api
 ./mvnw spring-boot:run
 ```
 
-## 📏 📐 Used to run the tests
+## 📏 📐 Run the tests
 
 ```
 ./mvnw clean test
@@ -72,7 +72,7 @@ cd interior-design-api
 When the API is running you can check the **Swagger UI** documentation through this link:
 
 ```
-http://localhost:8080/swagger-ui/index.html#/
+http://localhost:8080/swagger-ui-interior-design-planner.html
 ```
 
 ## 🏘️ API Endpoints
