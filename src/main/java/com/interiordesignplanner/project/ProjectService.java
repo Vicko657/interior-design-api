@@ -48,6 +48,12 @@ public class ProjectService {
 
     }
 
+    public List<Project> getAllProjectsOrderByDueDateAsc() {
+
+        return projectRepository.findAllProjectsOrderByDueDateAsc();
+
+    }
+
     public ProjectDTO getProject(Long id) throws NoSuchElementException {
         return projectRepository.findById(id)
                 .map(projectDTOMapper)

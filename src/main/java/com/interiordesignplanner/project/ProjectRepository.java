@@ -13,4 +13,6 @@ public interface ProjectRepository extends ListCrudRepository<Project, Long> {
     @Query("SELECT i FROM Project i WHERE i.status = :status")
     List<Project> getByStatus(@Param("status") ProjectStatus status);
 
+    @Query("SELECT p FROM Project p ORDER BY p.dueDate ASC")
+    List<Project> findAllProjectsOrderByDueDateAsc();
 }

@@ -96,6 +96,13 @@ public class ProjectController {
     }
 
     @Tag(name = "projects", description = "Client's Project directory")
+    @Operation(summary = "Project deadlines", description = "Returns the projects in order of deadline")
+    @GetMapping("projects/deadline")
+    public List<Project> getAllProjectsOrderByDueDateAsc() {
+        return projectService.getAllProjectsOrderByDueDateAsc();
+    }
+
+    @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Deletes project", description = "Deletes the project and its information")
     @DeleteMapping("/projects/{projectId}")
     @ResponseStatus(HttpStatus.OK)
