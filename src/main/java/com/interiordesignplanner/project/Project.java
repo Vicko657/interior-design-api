@@ -58,7 +58,6 @@ public class Project extends AbstractEntity {
 
     // Project | Parameterless constructor
     public Project() {
-        this("Project Name:", 120000, "Aims for the project", "Meeting URL");
     }
 
     // Project | Getters
