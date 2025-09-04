@@ -2,7 +2,6 @@ package com.interiordesignplanner.room;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -16,27 +15,20 @@ public class RoomService {
 
     private final ProjectService projectService;
     private final RoomRepository roomRepository;
-    private final RoomDTOMapper roomDTOMapper;
 
-    public RoomService(RoomRepository roomRepository, RoomDTOMapper roomDTOMapper,
-            ProjectService projectService) {
+    public RoomService(RoomRepository roomRepository, ProjectService projectService) {
         this.roomRepository = roomRepository;
-        this.roomDTOMapper = roomDTOMapper;
         this.projectService = projectService;
 
     }
 
-    public List<RoomDTO> getAllRooms() {
-        return roomRepository.findAll()
-                .stream()
-                .map(roomDTOMapper)
-                .collect(Collectors.toList());
+    public List<Room> getAllRooms() {
+        return roomRepository.findAll();
     }
 
-    public RoomDTO getRoom(Long id) throws NoSuchElementException {
+    public Room getRoom(Long id) throws NoSuchElementException {
         return roomRepository.findById(id)
-                .map(roomDTOMapper)
-                .orElseThrow(() -> new RoomNotFoundException(id));
+                .orElseThrow(() -> new NoSuchElementException("ID" + id + "was not found"));
     }
 
     public Room getRoomEntity(Long id) throws NoSuchElementException {

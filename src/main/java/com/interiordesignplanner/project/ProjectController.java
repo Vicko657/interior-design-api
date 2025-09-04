@@ -33,7 +33,7 @@ public class ProjectController {
     @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Finds project by ID", description = "Returns one project, including their name, the budget, project status, start date, deadline and meeting links")
     @GetMapping(value = "/projects/{id}")
-    public ProjectDTO getProject(@PathVariable Long id) {
+    public Project getProject(@PathVariable Long id) {
         try {
             return projectService.getProject(id);
         } catch (NoSuchElementException e) {
@@ -45,7 +45,7 @@ public class ProjectController {
     @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Retrieves all of the client's projects", description = "Retrieves all the project information, including the which clients project it is, name, the budget, project status, start date, deadline and meeting links")
     @GetMapping("/projects")
-    public List<ProjectDTO> getAllProjects() {
+    public List<Project> getAllProjects() {
         return projectService.getAllProjects();
     }
 

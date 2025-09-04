@@ -32,7 +32,7 @@ public class RoomController {
     @Tag(name = "rooms", description = "Project's Room specification")
     @Operation(summary = "Retrieves all of the rooms", description = "Returns all the room specification, including the client and project it is linked to, roomType, roomSize, checkList of tasks, changes to the room")
     @GetMapping("/rooms")
-    public List<RoomDTO> getAllRooms() {
+    public List<Room> getAllRooms() {
         return roomService.getAllRooms();
     }
 
