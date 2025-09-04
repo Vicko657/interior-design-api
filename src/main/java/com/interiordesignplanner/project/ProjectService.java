@@ -3,7 +3,6 @@ package com.interiordesignplanner.project;
 import java.time.Instant;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -18,20 +17,14 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ClientService clientService;
-    private final ProjectDTOMapper projectDTOMapper;
 
-    public ProjectService(ProjectRepository projectRepository,
-            ProjectDTOMapper projectDTOMapper, ClientService clientService) {
+    public ProjectService(ProjectRepository projectRepository, ClientService clientService) {
         this.projectRepository = projectRepository;
         this.clientService = clientService;
-        this.projectDTOMapper = projectDTOMapper;
     }
 
-    public List<ProjectDTO> getAllProjects() {
-        return projectRepository.findAll()
-                .stream()
-                .map(projectDTOMapper)
-                .collect(Collectors.toList());
+    public List<Project> getAllProjects() {
+        return projectRepository.findAll();
     }
 
     public List<Project> getProjectStatus(String status) {
@@ -54,10 +47,9 @@ public class ProjectService {
 
     }
 
-    public ProjectDTO getProject(Long id) throws NoSuchElementException {
+    public Project getProject(Long id) throws NoSuchElementException {
         return projectRepository.findById(id)
-                .map(projectDTOMapper)
-                .orElseThrow(() -> new ProjectNotFoundException(id));
+                .orElseThrow(() -> new NoSuchElementException("ID" + id + "was not found"));
     }
 
     public Project createProject(Project project, Long clientId) {

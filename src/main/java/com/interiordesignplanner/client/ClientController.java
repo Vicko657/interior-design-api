@@ -31,7 +31,7 @@ public class ClientController {
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Finds client by ID", description = "Returns one clients details, including their name, email, phoneNo, address, projects and other details")
     @GetMapping(value = "/clients/{id}")
-    public ClientDTO getClient(@PathVariable Long id) {
+    public Client getClient(@PathVariable Long id) {
         try {
             return clientService.getClient(id);
         } catch (NoSuchElementException e) {
@@ -43,7 +43,7 @@ public class ClientController {
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Retrieves all clients", description = "Retrieves all the clients details, including their name, email, phoneNo, address, projects and other details")
     @GetMapping("/clients")
-    public List<ClientDTO> getAllClients() {
+    public List<Client> getAllClients() {
         return clientService.getAllClients();
     }
 

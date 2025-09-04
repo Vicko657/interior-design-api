@@ -1,7 +1,7 @@
 package com.interiordesignplanner.client;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -10,24 +10,18 @@ import org.springframework.stereotype.Service;
 public class ClientService {
 
     public ClientRepository clientRepository;
-    private final ClientDTOMapper clientDTOMapper;
 
-    public ClientService(ClientRepository clientRepository, ClientDTOMapper clientDTOMapper) {
+    public ClientService(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
-        this.clientDTOMapper = clientDTOMapper;
     }
 
-    public List<ClientDTO> getAllClients() {
-        return clientRepository.findAll()
-                .stream()
-                .map(clientDTOMapper)
-                .collect(Collectors.toList());
+    public List<Client> getAllClients() {
+        return clientRepository.findAll();
     }
 
-    public ClientDTO getClient(Long id) {
+    public Client getClient(Long id) throws NoSuchElementException {
         return clientRepository.findById(id)
-                .map(clientDTOMapper)
-                .orElseThrow(() -> new ClientNotFoundException(id));
+                .orElseThrow(() -> new NoSuchElementException("ID" + id + "was not found"));
     }
 
     public Client getClientEntity(Long id) {
