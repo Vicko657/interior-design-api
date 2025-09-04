@@ -91,7 +91,7 @@ public class ProjectController {
     @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Finds project by status", description = "Returns the projects that have the same status")
     @GetMapping("projects/status/{status}")
-    public List<Project> getProjectStatus(@PathVariable("status") String status) {
+    public List<Status> getProjectStatus(@PathVariable("status") String status) {
         return projectService.getProjectStatus(status);
     }
 

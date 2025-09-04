@@ -27,7 +27,7 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public List<Project> getProjectStatus(String status) {
+    public List<Status> getProjectStatus(String status) {
 
         ProjectStatus[] statusValues = ProjectStatus.values();
 
