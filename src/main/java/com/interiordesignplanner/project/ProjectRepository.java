@@ -14,11 +14,15 @@ public interface ProjectRepository extends ListCrudRepository<Project, Long> {
     @Query("select i.status, i.projectName, i.client.firstName, i.client.lastName, i.startDate, i.dueDate from Project i where i.status = :status")
     List<Status> getByStatus(@Param("status") ProjectStatus status);
 
-    @Query("SELECT p FROM Project p ORDER BY p.dueDate ASC")
-    List<Project> findAllProjectsOrderByDueDateAsc();
+    @Query("select p.dueDate, p.startDate, p.projectName, p.status, p.client.id from Project p order by p.dueDate ASC")
+    List<Deadline> findAllProjectsDueSoonOrderByDueDateAsc();
 }
 
 // Projection Queries
 record Status(ProjectStatus status, String projectName, String firstName, String lastName, LocalDate startDate,
         LocalDate dueDate) {
+}
+
+record Deadline(LocalDate dueDate, LocalDate startDate, String projectName, ProjectStatus status, Long clientId) {
+
 }

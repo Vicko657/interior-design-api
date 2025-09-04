@@ -41,9 +41,9 @@ public class ProjectService {
 
     }
 
-    public List<Project> getAllProjectsOrderByDueDateAsc() {
+    public List<Deadline> getAllProjectsDueSoonOrderByDueDateAsc() {
 
-        return projectRepository.findAllProjectsOrderByDueDateAsc();
+        return projectRepository.findAllProjectsDueSoonOrderByDueDateAsc();
 
     }
 

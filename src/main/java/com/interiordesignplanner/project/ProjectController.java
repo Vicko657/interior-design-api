@@ -98,8 +98,8 @@ public class ProjectController {
     @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Project deadlines", description = "Returns the projects in order of deadline")
     @GetMapping("projects/deadline")
-    public List<Project> getAllProjectsOrderByDueDateAsc() {
-        return projectService.getAllProjectsOrderByDueDateAsc();
+    public List<Deadline> getAllProjectsDueSoonOrderByDueDateAsc() {
+        return projectService.getAllProjectsDueSoonOrderByDueDateAsc();
     }
 
     @Tag(name = "projects", description = "Client's Project directory")
