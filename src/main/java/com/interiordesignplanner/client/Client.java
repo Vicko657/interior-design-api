@@ -39,8 +39,7 @@ public class Client extends AbstractEntity {
 
     // Client | Parameterless constructor
     public Client() {
-        this("firstname", "lastname", "client@gmail.com", "01234567891", "No. address line, city, postcode",
-                "additional details");
+
     }
 
     // Client | Getters

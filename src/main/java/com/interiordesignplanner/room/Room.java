@@ -41,7 +41,7 @@ public class Room extends AbstractEntity {
 
     // Room | Parameterless constructor
     public Room() {
-        this("Type of Room:", 7.5, 4.5, 5.5, "m", "Room checklist", "Room changes");
+
     }
 
     // Room | Getters
