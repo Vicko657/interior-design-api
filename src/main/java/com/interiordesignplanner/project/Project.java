@@ -9,7 +9,6 @@ import com.interiordesignplanner.AbstractEntity;
 import com.interiordesignplanner.client.Client;
 import com.interiordesignplanner.room.Room;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -26,25 +25,24 @@ public class Project extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     @JsonBackReference
-    private Client client; // Clients foreign key
+    public Client client; // Clients foreign key
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "room_id", referencedColumnName = "id")
-    @JsonManagedReference
-    private Room room; // Room foreign key
-
-    private String projectName; // The projects name
+    public String projectName; // The projects name
 
     // Project Enum - The projects status default is planning
     @Enumerated(EnumType.STRING)
-    private ProjectStatus status = ProjectStatus.PLANNING;
+    public ProjectStatus status = ProjectStatus.PLANNING;
 
-    private Integer budget; // The budget for the project
-    private LocalDate startDate; // The date the project started
-    private LocalDate dueDate; // The projects deadline
-    private String description; // The description of the project
-    private String meetingURL; // The meeting link - gmeets
-    private Instant completedAt; // The date the project is completed
+    public Integer budget; // The budget for the project
+    public LocalDate startDate; // The date the project started
+    public LocalDate dueDate; // The projects deadline
+    public String description; // The description of the project
+    public String meetingURL; // The meeting link - gmeets
+    public Instant completedAt; // The date the project is completed
+
+    @OneToOne(mappedBy = "project")
+    @JsonManagedReference
+    public Room room; // Room foreign key
 
     // Project | Constructor
     public Project(String projectName, Integer budget, String description, String meetingURL) {
@@ -70,7 +68,7 @@ public class Project extends AbstractEntity {
         return projectName;
     }
 
-    public ProjectStatus getProjectStatus() {
+    public ProjectStatus getStatus() {
         return status;
     }
 
@@ -111,7 +109,7 @@ public class Project extends AbstractEntity {
         this.projectName = projectName;
     }
 
-    public void setProjectStatus(ProjectStatus status) {
+    public void setStatus(ProjectStatus status) {
         this.status = status;
     }
 

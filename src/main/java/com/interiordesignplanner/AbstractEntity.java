@@ -25,9 +25,9 @@ public abstract class AbstractEntity {
 
     // JPA Auditing
     @CreatedDate
-    private Instant createdAt; // The date it was added on the system
+    public Instant createdAt; // The date it was added on the system
     @LastModifiedDate
-    private Instant updatedAt; // Updates the date, each time data is modified
+    public Instant updatedAt; // Updates the date, each time data is modified
 
     public Long getId() {
         return id;

@@ -15,17 +15,17 @@ import jakarta.persistence.Table;
 public class Client extends AbstractEntity {
 
     // Client | Instances
-    protected String firstName; // Client's fullname
-    protected String lastName; // Client's fullname
-    protected String email; // Client's email address
-    protected String phone; // Client's phone number
-    protected String address; // Client's address
-    protected String notes; // Notes specific for the Client
+    public String firstName; // Client's fullname
+    public String lastName; // Client's fullname
+    public String email; // Client's email address
+    public String phone; // Client's phone number
+    public String address; // Client's address
+    public String notes; // Notes specific for the Client
 
     // Creates One to many relationship with Project table
     @OneToMany(mappedBy = "client")
     @JsonManagedReference
-    private List<Project> projects;
+    public List<Project> projects;
 
     // Client | Constructor
     public Client(String firstName, String lastName, String email, String phone, String address, String notes) {
@@ -61,7 +61,7 @@ public class Client extends AbstractEntity {
         return email;
     }
 
-    public String getPhoneNo() {
+    public String getPhone() {
         return phone;
     }
 
@@ -71,10 +71,6 @@ public class Client extends AbstractEntity {
 
     public String getNotes() {
         return notes;
-    }
-
-    public List<Project> getProject() {
-        return projects;
     }
 
     // Client | Setters
@@ -90,7 +86,7 @@ public class Client extends AbstractEntity {
         this.email = email;
     }
 
-    public void setPhoneNo(String phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

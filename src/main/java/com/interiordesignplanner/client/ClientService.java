@@ -45,7 +45,7 @@ public class ClientService {
         existingClientId.setFirstName(updateClient.getFirstName());
         existingClientId.setLastName(updateClient.getLastName());
         existingClientId.setEmail(updateClient.getEmail());
-        existingClientId.setPhoneNo(updateClient.getPhoneNo());
+        existingClientId.setPhone(updateClient.getPhone());
         existingClientId.setAddress(updateClient.getAddress());
         existingClientId.setNotes(updateClient.getNotes());
 

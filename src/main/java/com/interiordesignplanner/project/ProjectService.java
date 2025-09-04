@@ -75,14 +75,14 @@ public class ProjectService {
         ;
         existingProjectId.setProjectName(project.getProjectName());
         existingProjectId.setBudget(project.getBudget());
-        existingProjectId.setProjectStatus(project.getProjectStatus());
+        existingProjectId.setStatus(project.getStatus());
         existingProjectId.setStartDate(project.getStartDate());
         existingProjectId.setMeetingURL(project.getMeetingURL());
         existingProjectId.setDueDate(project.getDueDate());
         existingProjectId.setClient(project.getClient());
 
         // When the Project Status changes to completed the completed date is set
-        if (existingProjectId.getProjectStatus() == ProjectStatus.COMPLETED
+        if (existingProjectId.getStatus() == ProjectStatus.COMPLETED
                 && existingProjectId.getCompletedAt() == null) {
             existingProjectId.setCompletedAt(Instant.now());
         }

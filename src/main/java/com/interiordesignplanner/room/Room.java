@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interiordesignplanner.AbstractEntity;
 import com.interiordesignplanner.project.Project;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -13,17 +15,18 @@ import jakarta.persistence.Table;
 public class Room extends AbstractEntity {
 
     // Room | Instances
-    @OneToOne(mappedBy = "room")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
     @JsonBackReference
-    private Project project; // Project foreign key
+    public Project project; // Project foreign key
 
-    private String type;
-    private Double length;
-    private Double height;
-    private Double width;
-    private String unit;
-    private String checklist;
-    private String changes;
+    public String type;
+    public Double length;
+    public Double height;
+    public Double width;
+    public String unit;
+    public String checklist;
+    public String changes;
 
     // Room | Constructor
     public Room(String type, Double length, Double height, Double width, String unit, String checklist,
