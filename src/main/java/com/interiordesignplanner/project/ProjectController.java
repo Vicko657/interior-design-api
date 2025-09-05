@@ -32,7 +32,7 @@ public class ProjectController {
 
     @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Finds project by ID", description = "Returns one project, including their name, the budget, project status, start date, deadline and meeting links")
-    @GetMapping(value = "/projects/{id}")
+    @GetMapping(value = "/projects/{id}", produces = "application/json")
     public Project getProject(@PathVariable Long id) {
         try {
             return projectService.getProject(id);
@@ -44,7 +44,7 @@ public class ProjectController {
 
     @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Retrieves all of the client's projects", description = "Retrieves all the project information, including the which clients project it is, name, the budget, project status, start date, deadline and meeting links")
-    @GetMapping("/projects")
+    @GetMapping(value = "/projects", produces = "application/json")
     public List<Project> getAllProjects() {
         return projectService.getAllProjects();
     }
@@ -78,7 +78,7 @@ public class ProjectController {
 
     @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Reassigns project to a different client", description = "Updates to a different client for the project")
-    @PatchMapping("/projects/{projectId}/clients/{clientId}")
+    @PatchMapping(value = "/projects/{projectId}/clients/{clientId}", produces = "application/json")
     public Project reassignClient(@PathVariable("projectId") Long projectId, @PathVariable("clientId") Long clientId) {
 
         try {
@@ -90,21 +90,21 @@ public class ProjectController {
 
     @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Finds project by status", description = "Returns the projects that have the same status")
-    @GetMapping("projects/status/{status}")
+    @GetMapping(value = "projects/status/{status}", produces = "application/json")
     public List<Status> getProjectStatus(@PathVariable("status") String status) {
         return projectService.getProjectStatus(status);
     }
 
     @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Project deadlines", description = "Returns the projects in order of deadline")
-    @GetMapping("projects/deadline")
+    @GetMapping(value = "projects/deadline", produces = "application/json")
     public List<Deadline> getAllProjectsDueSoonOrderByDueDateAsc() {
         return projectService.getAllProjectsDueSoonOrderByDueDateAsc();
     }
 
     @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Deletes project", description = "Deletes the project and its information")
-    @DeleteMapping("/projects/{projectId}")
+    @DeleteMapping(value = "/projects/{projectId}" , produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void deleteProject(@PathVariable("projectId") Long projectId) {
         try {

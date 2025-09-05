@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@RestController
+@RestController("api/")
 public class ClientController {
 
     public ClientService clientService;
@@ -28,17 +28,17 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-    
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Retrieves all clients", description = "Retrieves all the clients details, including their name, email, phoneNo, address, projects and other details")
-    @GetMapping("/clients")
+
+    @GetMapping(value = "/clients", produces = "application/json")
     public List<Client> getAllClients() {
         return clientService.getAllClients();
     }
 
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Finds client by ID", description = "Returns one clients details, including their name, email, phoneNo, address, projects and other details")
-    @GetMapping(value = "/clients/{id}")
+    @GetMapping(value = "/clients/{id}", produces = "application/json")
     public Client getClient(@PathVariable Long id) {
         try {
             return clientService.getClient(id);
@@ -50,7 +50,7 @@ public class ClientController {
 
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Finds client by lastname", description = "Returns the client details, including their name, email, phoneNo, address, projects and other details")
-    @GetMapping("/clients/lastName/{lastName}")
+    @GetMapping(value = "/clients/lastName/{lastName}", produces = "application/json")
     public List<Client> getByLastNameIgnoreCase(@PathVariable("lastName") String lastName) {
         return clientService.getByLastNameIgnoreCase(lastName);
     }
@@ -58,7 +58,7 @@ public class ClientController {
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Create a new client", description = "Creates a new client and add's their details")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/clients")
+    @PostMapping(value = "/clients", produces = "application/json")
     public Client createClient(@RequestBody Client client) {
 
         try {
@@ -72,7 +72,7 @@ public class ClientController {
 
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Update client", description = "Updates the client's records")
-    @PutMapping("/clients/{id}")
+    @PutMapping(value = "/clients/{id}", produces = "application/json")
     public Client updateClient(@PathVariable Long id, @RequestBody Client updateClient) {
 
         try {
@@ -84,7 +84,7 @@ public class ClientController {
 
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Deletes client", description = "Deletes the client's records")
-    @DeleteMapping("/clients/{id}")
+    @DeleteMapping(value = "/clients/{id}", produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void deleteClient(@PathVariable Long id) {
         try {

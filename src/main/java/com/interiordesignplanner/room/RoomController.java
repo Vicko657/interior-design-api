@@ -31,7 +31,7 @@ public class RoomController {
 
     @Tag(name = "rooms", description = "Project's Room specification")
     @Operation(summary = "Retrieves all of the rooms", description = "Returns all the room specification, including the client and project it is linked to, roomType, roomSize, checkList of tasks, changes to the room")
-    @GetMapping("/rooms")
+    @GetMapping(value = "/rooms", produces = "application/json")
     public List<Room> getAllRooms() {
         return roomService.getAllRooms();
     }
@@ -39,7 +39,7 @@ public class RoomController {
     @Tag(name = "rooms", description = "Project's Room specification")
     @Operation(summary = "Adds a room to the project", description = "Creates a room with specifications for the project")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/rooms/{projectId}")
+    @PostMapping(value = "/rooms/{projectId}", produces = "application/json")
     public Room addRoom(@RequestBody Room room, @PathVariable("projectId") Long projectId) {
 
         try {
@@ -53,7 +53,7 @@ public class RoomController {
 
     @Tag(name = "rooms", description = "Project's Room specification")
     @Operation(summary = "Updates room", description = "Updates the room's specification")
-    @PutMapping("/rooms/{roomId}")
+    @PutMapping(value = "/rooms/{roomId}", produces = "application/json")
     public Room updateRoom(@PathVariable("roomId") Long roomId, @RequestBody Room updateRoom) {
 
         try {
@@ -65,7 +65,7 @@ public class RoomController {
 
     @Tag(name = "rooms", description = "Project's Room specification")
     @Operation(summary = "Reassigns room to a different project", description = "Updates to a different project for the room")
-    @PatchMapping("/rooms/{roomId}/projects/{projectId}")
+    @PatchMapping(value = "/rooms/{roomId}/projects/{projectId}", produces = "application/json")
     public Room reassignProject(@PathVariable("roomId") Long roomId, @PathVariable("projectId") Long projectId) {
 
         try {
@@ -77,14 +77,14 @@ public class RoomController {
 
     @Tag(name = "rooms", description = "Project's Room specification")
     @Operation(summary = "Finds room by type", description = "Returns the same type of rooms")
-    @GetMapping("rooms/type/{type}")
+    @GetMapping(value = "rooms/type/{type}", produces = "application/json")
     public List<Room> getType(@PathVariable("type") String type) {
         return roomService.getType(type);
     }
 
     @Tag(name = "rooms", description = "Project's Room specification")
     @Operation(summary = "Deletes room", description = "Deletes the room and its specifications")
-    @DeleteMapping("/rooms/{roomId}")
+    @DeleteMapping(value = "/rooms/{roomId}", produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void deleteProject(@PathVariable("roomId") Long roomId) {
         try {
