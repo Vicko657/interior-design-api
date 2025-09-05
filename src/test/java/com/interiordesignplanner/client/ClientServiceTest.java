@@ -75,6 +75,21 @@ public class ClientServiceTest {
 
     }
 
+    @Test
+    @DisplayName("GetByLastNameIgnoreCase: Returns Client by LastName")
+    public void testGetByLastNameIgnoreCase() {
+        // Arrange
+        String LastName = "lastname1";
+        Mockito.when(cRepository.findByLastNameIgnoreCase(LastName)).thenReturn(List.of(client1));
+
+        // Act
+        List<Client> result = cService.getByLastNameIgnoreCase(LastName);
+
+        // Assert
+        assertThat(result).isEqualTo(List.of(client1));
+        assertThat(result).extracting(Client::getPhone).containsExactly("PhoneNumber1");
+    }
+
     // Reset all mock objects
     @AfterEach
     public void tearDown() {
