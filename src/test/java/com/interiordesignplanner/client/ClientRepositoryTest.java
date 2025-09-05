@@ -2,17 +2,19 @@ package com.interiordesignplanner.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -20,7 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class ClientRepositoryTest {
 
     @Mock
-    public ClientRepository clientRepository;
+    public ClientRepository cRepository;
 
     public Client ctest1;
     public Client ctest2;
@@ -42,18 +44,33 @@ public class ClientRepositoryTest {
     public void testfindByLastNameIgnoreCase_ReturnsSameClient() {
 
         // Arrange
-        List<Client> expectedClients = Arrays.asList(ctest1);
-        when(clientRepository.findByLastNameIgnoreCase("cook")).thenReturn(expectedClients);
+        Map<String, List<Client>> test = new HashMap<>();
+        test.put("cook", List.of(ctest1));
+        test.put("PRICE", List.of(ctest2));
+        test.put("Harr", List.of(ctest3));
 
-        // Act
-        List<Client> result = clientRepository.findByLastNameIgnoreCase("cook");
+        for (Map.Entry<String, List<Client>> entry : test.entrySet()) {
 
-        // Assert
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(ctest1, result.get(0));
-        verify(clientRepository).findByLastNameIgnoreCase("cook");
+            String lastName = entry.getKey();
+            List<Client> expectedClients = entry.getValue();
 
+            when(cRepository.findByLastNameIgnoreCase(lastName)).thenReturn(expectedClients);
+
+            // Act
+            List<Client> result = cRepository.findByLastNameIgnoreCase(lastName);
+
+            // Assert
+            assertNotNull(result);
+            assertEquals(expectedClients.size(), result.size());
+            assertEquals(expectedClients, result);
+        }
+
+    }
+
+    // Reset all mock objects
+    @AfterEach
+    public void tearDown() {
+        Mockito.reset(cRepository);
     }
 
 }
