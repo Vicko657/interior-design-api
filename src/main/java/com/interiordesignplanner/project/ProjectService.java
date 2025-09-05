@@ -49,7 +49,7 @@ public class ProjectService {
 
     public Project getProject(Long id) throws NoSuchElementException {
         return projectRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("ID" + id + "was not found"));
+                .orElseThrow(() -> new ProjectNotFoundException(id));
     }
 
     public Project createProject(Project project, Long clientId) {
@@ -65,13 +65,8 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
-    public Project getProjectEntity(Long id) throws NoSuchElementException {
-        return projectRepository.findById(id)
-                .orElseThrow(() -> new ProjectNotFoundException(id));
-    }
-
     public Project updateProject(Long id, Project project) {
-        Project existingProjectId = getProjectEntity(id);
+        Project existingProjectId = getProject(id);
         ;
         existingProjectId.setProjectName(project.getProjectName());
         existingProjectId.setBudget(project.getBudget());
@@ -91,14 +86,14 @@ public class ProjectService {
     }
 
     public Project deleteProject(Long id) {
-        Project project = getProjectEntity(id);
+        Project project = getProject(id);
         projectRepository.deleteById(id);
         return project;
     }
 
     // Sets the Client to the project
     public Project reassignClient(Long clientId, Long projectId) {
-        Project existingProjectId = getProjectEntity(projectId);
+        Project existingProjectId = getProject(projectId);
         Client client = clientService.getClient(clientId);
         existingProjectId.setClient(client);
         return projectRepository.save(existingProjectId);

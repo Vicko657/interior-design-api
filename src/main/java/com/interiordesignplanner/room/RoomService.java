@@ -59,7 +59,7 @@ public class RoomService {
         if (room.getId() != null && roomRepository.existsById(room.getId())) {
             throw new OptimisticLockingFailureException("ID" + room.getId() + "was not found");
         }
-        Project project = projectService.getProjectEntity(projectId);
+        Project project = projectService.getProject(projectId);
 
         project.setRoom(room);
         room.setProject(project);
@@ -90,7 +90,7 @@ public class RoomService {
     public Room reassignProject(Long projectId, Long roomId) {
 
         Room existingRoomId = getRoomEntity(roomId);
-        Project project = projectService.getProjectEntity(projectId);
+        Project project = projectService.getProject(projectId);
         project.setRoom(existingRoomId);
         existingRoomId.setProject(project);
         return roomRepository.save(existingRoomId);
