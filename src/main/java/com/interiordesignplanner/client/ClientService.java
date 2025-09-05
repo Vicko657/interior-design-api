@@ -29,6 +29,14 @@ public class ClientService {
                 .orElseThrow(() -> new ClientNotFoundException(id));
     }
 
+    public List<Client> getByLastNameIgnoreCase(String lastName) {
+
+        lastName.equalsIgnoreCase(lastName);
+
+        return clientRepository.findByLastNameIgnoreCase(lastName);
+
+    }
+
     public Client createClient(Client client) {
         if (client == null) {
             throw new IllegalArgumentException("Client must not be null");

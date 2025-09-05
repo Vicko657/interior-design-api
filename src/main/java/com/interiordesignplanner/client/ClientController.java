@@ -48,6 +48,13 @@ public class ClientController {
     }
 
     @Tag(name = "clients", description = "Information about the clients")
+    @Operation(summary = "Finds client by lastname", description = "Returns the client details, including their name, email, phoneNo, address, projects and other details")
+    @GetMapping("/clients/lastName/{lastName}")
+    public List<Client> getByLastNameIgnoreCase(@PathVariable("lastName") String lastName) {
+        return clientService.getByLastNameIgnoreCase(lastName);
+    }
+
+    @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Create a new client", description = "Creates a new client and add's their details")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/clients")
