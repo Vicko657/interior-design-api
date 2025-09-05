@@ -42,11 +42,6 @@ public class RoomService {
 
     public Room getRoom(Long id) throws NoSuchElementException {
         return roomRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("ID" + id + "was not found"));
-    }
-
-    public Room getRoomEntity(Long id) throws NoSuchElementException {
-        return roomRepository.findById(id)
                 .orElseThrow(() -> new RoomNotFoundException(id));
     }
 
@@ -70,7 +65,7 @@ public class RoomService {
     }
 
     public Room updateRoom(Long id, Room room) {
-        Room existingRoomId = getRoomEntity(id);
+        Room existingRoomId = getRoom(id);
         existingRoomId.setType(room.getType());
         existingRoomId.setHeight(room.getHeight());
         existingRoomId.setLength(room.getLength());
@@ -82,14 +77,14 @@ public class RoomService {
     }
 
     public Room deleteRoom(Long id) {
-        Room room = getRoomEntity(id);
+        Room room = getRoom(id);
         roomRepository.deleteById(id);
         return room;
     }
 
     public Room reassignProject(Long projectId, Long roomId) {
 
-        Room existingRoomId = getRoomEntity(roomId);
+        Room existingRoomId = getRoom(roomId);
         Project project = projectService.getProject(projectId);
         project.setRoom(existingRoomId);
         existingRoomId.setProject(project);
