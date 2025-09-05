@@ -7,12 +7,15 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 public class ClientServiceTest {
-
+    @Mock
     public ClientService cService;
+    @Mock
     public ClientRepository cRepository;
+    @Mock
     public Client client1, client2;
 
     @BeforeEach
@@ -28,7 +31,7 @@ public class ClientServiceTest {
     }
 
     @Test
-    @DisplayName("Gets all of the clients in the database")
+    @DisplayName("Returns empty list")
     public void testGetAllClientsIntiallyEmpty() {
         Mockito.when(cRepository.findAll()).thenReturn(List.of());
         assertTrue(cService.getAllClients().isEmpty());
