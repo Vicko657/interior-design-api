@@ -2,8 +2,11 @@ package com.interiordesignplanner.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +67,23 @@ public class ClientRepositoryTest {
             assertEquals(expectedClients.size(), result.size());
             assertEquals(expectedClients, result);
         }
+
+    }
+
+    @Test
+    @DisplayName("FindByLastName: Client isnt found by lastname and ignorescase")
+    public void testfindByLastNameIgnoreCase_ReturnsEmptyList() {
+
+        // Arrange
+        when(cRepository.findByLastNameIgnoreCase("Brown")).thenReturn(Collections.emptyList());
+
+        // Act
+        List<Client> result = cRepository.findByLastNameIgnoreCase("Brown");
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(cRepository).findByLastNameIgnoreCase("Brown");
 
     }
 
