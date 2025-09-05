@@ -26,6 +26,20 @@ public class RoomService {
         return roomRepository.findAll();
     }
 
+    public List<Room> getType(String type) {
+
+        RoomType[] typesValues = RoomType.values();
+
+        for (RoomType type1 : typesValues) {
+            if (type1.name().equalsIgnoreCase(type)) {
+                return roomRepository.getByType(type1);
+            }
+        }
+
+        return null;
+
+    }
+
     public Room getRoom(Long id) throws NoSuchElementException {
         return roomRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("ID" + id + "was not found"));

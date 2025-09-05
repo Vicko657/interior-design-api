@@ -76,6 +76,13 @@ public class RoomController {
     }
 
     @Tag(name = "rooms", description = "Project's Room specification")
+    @Operation(summary = "Finds room by type", description = "Returns the same type of rooms")
+    @GetMapping("rooms/type/{type}")
+    public List<Room> getType(@PathVariable("type") String type) {
+        return roomService.getType(type);
+    }
+
+    @Tag(name = "rooms", description = "Project's Room specification")
     @Operation(summary = "Deletes room", description = "Deletes the room and its specifications")
     @DeleteMapping("/rooms/{roomId}")
     @ResponseStatus(HttpStatus.OK)
