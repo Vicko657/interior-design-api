@@ -1,9 +1,9 @@
 package com.interiordesignplanner.client;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import java.util.Collections;
 import java.util.List;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -42,9 +42,22 @@ public class ClientServiceTest {
     @Test
     @DisplayName("GetAllClients: Returns empty list")
     public void testGetAllClientsIntiallyEmpty() {
-        Mockito.when(cRepository.findAll()).thenReturn(List.of());
-        assertTrue(cService.getAllClients().isEmpty());
+        // Arrange
+        List<Client> clients = Collections.emptyList();
+        Mockito.when(cRepository.findAll()).thenReturn(clients);
 
+        // Act
+        List<Client> result = cService.getAllClients();
+
+        // Assert
+        assertThat(result).isEqualTo(clients);
+
+    }
+
+    // Reset all mock objects
+    @AfterEach
+    public void tearDown() {
+        Mockito.reset(cRepository);
     }
 
 }
