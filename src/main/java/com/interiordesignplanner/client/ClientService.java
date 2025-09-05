@@ -21,11 +21,6 @@ public class ClientService {
 
     public Client getClient(Long id) throws NoSuchElementException {
         return clientRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("ID" + id + "was not found"));
-    }
-
-    public Client getClientEntity(Long id) {
-        return clientRepository.findById(id)
                 .orElseThrow(() -> new ClientNotFoundException(id));
     }
 
@@ -49,7 +44,7 @@ public class ClientService {
     }
 
     public Client updateClient(Long id, Client updateClient) {
-        Client existingClientId = getClientEntity(id);
+        Client existingClientId = getClient(id);
         existingClientId.setFirstName(updateClient.getFirstName());
         existingClientId.setLastName(updateClient.getLastName());
         existingClientId.setEmail(updateClient.getEmail());
@@ -61,7 +56,7 @@ public class ClientService {
     }
 
     public Client deleteClient(Long id) {
-        Client client = getClientEntity(id);
+        Client client = getClient(id);
         clientRepository.deleteById(id);
         return client;
     }

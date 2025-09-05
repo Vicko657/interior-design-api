@@ -60,7 +60,7 @@ public class ProjectService {
         if (project.getId() != null && projectRepository.existsById(project.getId())) {
             throw new OptimisticLockingFailureException("ID" + project.getId() + "was not found");
         }
-        Client client = clientService.getClientEntity(clientId);
+        Client client = clientService.getClient(clientId);
         project.setClient(client);
         return projectRepository.save(project);
     }
@@ -99,7 +99,7 @@ public class ProjectService {
     // Sets the Client to the project
     public Project reassignClient(Long clientId, Long projectId) {
         Project existingProjectId = getProjectEntity(projectId);
-        Client client = clientService.getClientEntity(clientId);
+        Client client = clientService.getClient(clientId);
         existingProjectId.setClient(client);
         return projectRepository.save(existingProjectId);
     }
