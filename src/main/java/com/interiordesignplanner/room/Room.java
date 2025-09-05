@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.interiordesignplanner.AbstractEntity;
 import com.interiordesignplanner.project.Project;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -13,20 +17,23 @@ import jakarta.persistence.Table;
 public class Room extends AbstractEntity {
 
     // Room | Instances
-    @OneToOne(mappedBy = "room")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
     @JsonBackReference
-    private Project project; // Project foreign key
+    public Project project; // Project foreign key
 
-    private String type;
-    private Double length;
-    private Double height;
-    private Double width;
-    private String unit;
-    private String checklist;
-    private String changes;
+    @Enumerated(EnumType.STRING)
+    public RoomType type = null;
+
+    public Double length;
+    public Double height;
+    public Double width;
+    public String unit;
+    public String checklist;
+    public String changes;
 
     // Room | Constructor
-    public Room(String type, Double length, Double height, Double width, String unit, String checklist,
+    public Room(RoomType type, Double length, Double height, Double width, String unit, String checklist,
             String changes) {
 
         this.type = type;
@@ -49,7 +56,7 @@ public class Room extends AbstractEntity {
         return super.getId();
     }
 
-    public String getType() {
+    public RoomType getType() {
         return type;
     }
 
@@ -82,7 +89,7 @@ public class Room extends AbstractEntity {
     }
 
     // Room | Setters
-    public void setType(String type) {
+    public void setType(RoomType type) {
         this.type = type;
     }
 

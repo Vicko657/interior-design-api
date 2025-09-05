@@ -21,12 +21,15 @@ public class ClientService {
 
     public Client getClient(Long id) throws NoSuchElementException {
         return clientRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("ID" + id + "was not found"));
+                .orElseThrow(() -> new ClientNotFoundException(id));
     }
 
-    public Client getClientEntity(Long id) {
-        return clientRepository.findById(id)
-                .orElseThrow(() -> new ClientNotFoundException(id));
+    public List<Client> getByLastNameIgnoreCase(String lastName) {
+
+        lastName.equalsIgnoreCase(lastName);
+
+        return clientRepository.findByLastNameIgnoreCase(lastName);
+
     }
 
     public Client createClient(Client client) {
@@ -41,11 +44,11 @@ public class ClientService {
     }
 
     public Client updateClient(Long id, Client updateClient) {
-        Client existingClientId = getClientEntity(id);
+        Client existingClientId = getClient(id);
         existingClientId.setFirstName(updateClient.getFirstName());
         existingClientId.setLastName(updateClient.getLastName());
         existingClientId.setEmail(updateClient.getEmail());
-        existingClientId.setPhoneNo(updateClient.getPhoneNo());
+        existingClientId.setPhone(updateClient.getPhone());
         existingClientId.setAddress(updateClient.getAddress());
         existingClientId.setNotes(updateClient.getNotes());
 
@@ -53,7 +56,7 @@ public class ClientService {
     }
 
     public Client deleteClient(Long id) {
-        Client client = getClientEntity(id);
+        Client client = getClient(id);
         clientRepository.deleteById(id);
         return client;
     }

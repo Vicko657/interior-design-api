@@ -20,14 +20,15 @@ public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private Long id; // Entity's Id
 
     // JPA Auditing
+    @JsonIgnore
     @CreatedDate
-    private Instant createdAt; // The date it was added on the system
+    public Instant createdAt; // The date it was added on the system
+    @JsonIgnore
     @LastModifiedDate
-    private Instant updatedAt; // Updates the date, each time data is modified
+    public Instant updatedAt; // Updates the date, each time data is modified
 
     public Long getId() {
         return id;

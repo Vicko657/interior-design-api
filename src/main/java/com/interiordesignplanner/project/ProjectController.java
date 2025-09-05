@@ -91,15 +91,15 @@ public class ProjectController {
     @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Finds project by status", description = "Returns the projects that have the same status")
     @GetMapping("projects/status/{status}")
-    public List<Project> getProjectStatus(@PathVariable("status") String status) {
+    public List<Status> getProjectStatus(@PathVariable("status") String status) {
         return projectService.getProjectStatus(status);
     }
 
     @Tag(name = "projects", description = "Client's Project directory")
     @Operation(summary = "Project deadlines", description = "Returns the projects in order of deadline")
     @GetMapping("projects/deadline")
-    public List<Project> getAllProjectsOrderByDueDateAsc() {
-        return projectService.getAllProjectsOrderByDueDateAsc();
+    public List<Deadline> getAllProjectsDueSoonOrderByDueDateAsc() {
+        return projectService.getAllProjectsDueSoonOrderByDueDateAsc();
     }
 
     @Tag(name = "projects", description = "Client's Project directory")

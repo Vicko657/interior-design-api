@@ -28,6 +28,14 @@ public class ClientController {
         this.clientService = clientService;
     }
 
+    
+    @Tag(name = "clients", description = "Information about the clients")
+    @Operation(summary = "Retrieves all clients", description = "Retrieves all the clients details, including their name, email, phoneNo, address, projects and other details")
+    @GetMapping("/clients")
+    public List<Client> getAllClients() {
+        return clientService.getAllClients();
+    }
+
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Finds client by ID", description = "Returns one clients details, including their name, email, phoneNo, address, projects and other details")
     @GetMapping(value = "/clients/{id}")
@@ -41,10 +49,10 @@ public class ClientController {
     }
 
     @Tag(name = "clients", description = "Information about the clients")
-    @Operation(summary = "Retrieves all clients", description = "Retrieves all the clients details, including their name, email, phoneNo, address, projects and other details")
-    @GetMapping("/clients")
-    public List<Client> getAllClients() {
-        return clientService.getAllClients();
+    @Operation(summary = "Finds client by lastname", description = "Returns the client details, including their name, email, phoneNo, address, projects and other details")
+    @GetMapping("/clients/lastName/{lastName}")
+    public List<Client> getByLastNameIgnoreCase(@PathVariable("lastName") String lastName) {
+        return clientService.getByLastNameIgnoreCase(lastName);
     }
 
     @Tag(name = "clients", description = "Information about the clients")

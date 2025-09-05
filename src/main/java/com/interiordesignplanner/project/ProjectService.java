@@ -27,7 +27,7 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public List<Project> getProjectStatus(String status) {
+    public List<Status> getProjectStatus(String status) {
 
         ProjectStatus[] statusValues = ProjectStatus.values();
 
@@ -41,9 +41,9 @@ public class ProjectService {
 
     }
 
-    public List<Project> getAllProjectsOrderByDueDateAsc() {
+    public List<Deadline> getAllProjectsDueSoonOrderByDueDateAsc() {
 
-        return projectRepository.findAllProjectsOrderByDueDateAsc();
+        return projectRepository.findAllProjectsDueSoonOrderByDueDateAsc();
 
     }
 
@@ -60,7 +60,7 @@ public class ProjectService {
         if (project.getId() != null && projectRepository.existsById(project.getId())) {
             throw new OptimisticLockingFailureException("ID" + project.getId() + "was not found");
         }
-        Client client = clientService.getClientEntity(clientId);
+        Client client = clientService.getClient(clientId);
         project.setClient(client);
         return projectRepository.save(project);
     }
@@ -75,14 +75,14 @@ public class ProjectService {
         ;
         existingProjectId.setProjectName(project.getProjectName());
         existingProjectId.setBudget(project.getBudget());
-        existingProjectId.setProjectStatus(project.getProjectStatus());
+        existingProjectId.setStatus(project.getStatus());
         existingProjectId.setStartDate(project.getStartDate());
         existingProjectId.setMeetingURL(project.getMeetingURL());
         existingProjectId.setDueDate(project.getDueDate());
         existingProjectId.setClient(project.getClient());
 
         // When the Project Status changes to completed the completed date is set
-        if (existingProjectId.getProjectStatus() == ProjectStatus.COMPLETED
+        if (existingProjectId.getStatus() == ProjectStatus.COMPLETED
                 && existingProjectId.getCompletedAt() == null) {
             existingProjectId.setCompletedAt(Instant.now());
         }
@@ -99,7 +99,7 @@ public class ProjectService {
     // Sets the Client to the project
     public Project reassignClient(Long clientId, Long projectId) {
         Project existingProjectId = getProjectEntity(projectId);
-        Client client = clientService.getClientEntity(clientId);
+        Client client = clientService.getClient(clientId);
         existingProjectId.setClient(client);
         return projectRepository.save(existingProjectId);
     }
