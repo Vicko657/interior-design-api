@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +16,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@DisplayName(value = "Client Service Test Suite")
 public class ClientServiceTest {
 
     @Mock
@@ -36,7 +40,7 @@ public class ClientServiceTest {
     }
 
     @Test
-    @DisplayName("Returns empty list")
+    @DisplayName("GetAllClients: Returns empty list")
     public void testGetAllClientsIntiallyEmpty() {
         Mockito.when(cRepository.findAll()).thenReturn(List.of());
         assertTrue(cService.getAllClients().isEmpty());

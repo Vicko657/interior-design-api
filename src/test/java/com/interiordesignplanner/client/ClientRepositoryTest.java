@@ -38,7 +38,7 @@ public class ClientRepositoryTest {
     }
 
     @Test
-    @DisplayName("finds client by lastname and ignorescase")
+    @DisplayName("FindByLastName: Finds client by lastname and ignorescase")
     public void testfindByLastNameIgnoreCase_ReturnsSameClient() {
 
         // Arrange
