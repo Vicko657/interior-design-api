@@ -1,8 +1,10 @@
 package com.interiordesignplanner.client;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,6 +53,25 @@ public class ClientServiceTest {
 
         // Assert
         assertThat(result).isEqualTo(clients);
+
+    }
+
+    @Test
+    @DisplayName("GetAllClients: Returns all of the clients in the database")
+    public void testGetAllClientsAfterDetailsAreStored() {
+        // Arrange
+        List<Client> clients = new ArrayList<>();
+        clients.add(client1);
+        clients.add(client2);
+        // Act
+        Mockito.when(cRepository.findAll()).thenReturn(clients);
+        List<Client> result = cService.getAllClients();
+
+        // Assert
+        assertThat(result).isEqualTo(clients);
+        assertThat(result).extracting(Client::getFirstName).containsExactly("FirstName1", "FirstName2");
+        Mockito.verify(cRepository).findAll();
+        Mockito.verifyNoMoreInteractions(cRepository);
 
     }
 
