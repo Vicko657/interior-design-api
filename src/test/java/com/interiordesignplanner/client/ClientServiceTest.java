@@ -7,20 +7,25 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 public class ClientServiceTest {
-    @Mock
-    public ClientService cService;
+
     @Mock
     public ClientRepository cRepository;
-    @Mock
+
+    @InjectMocks
+    public ClientService cService;
+
     public Client client1, client2;
 
     @BeforeEach
     public void setUp() {
-        cRepository = Mockito.mock(ClientRepository.class);
         cService = new ClientService(cRepository);
         client1 = new Client("FirstName1", "LastName1", "Email1", "PhoneNumber1",
                 "Address1",
