@@ -59,10 +59,11 @@ public class ClientService {
         return clientRepository.save(existingClientId);
     }
 
-    public Client deleteClient(Long id) {
-        Client client = getClient(id);
+    public void deleteClient(Long id) {
+        if (!clientRepository.existsById(id)) {
+            throw new ClientNotFoundException(id);
+        }
         clientRepository.deleteById(id);
-        return client;
     }
 
 }

@@ -186,6 +186,22 @@ public class ClientServiceTest {
 
     }
 
+    @Test
+    @DisplayName("DeleteClient: Deletes client details")
+    public void testDeleteClient() {
+        // Arrange
+        Long clientId = 1L;
+        Mockito.when(cRepository.existsById(clientId)).thenReturn(true);
+
+        // Act
+        cService.deleteClient(clientId);
+
+        // Assert
+        Mockito.verify(cRepository).existsById(clientId);
+        Mockito.verify(cRepository).deleteById(clientId);
+
+    }
+
     // Reset all mock objects
     @AfterEach
     public void tearDown() {
