@@ -148,8 +148,8 @@ public class ClientServiceTest {
     @DisplayName("CreateClient: Adds a new Client")
     public void testCreateClient() {
         // Arrange
-        Client client3 = new Client("FirstName3", "LastName3", "Email3", "PhoneNumber4", "Address5",
-                "Notes6");
+        Client client3 = new Client("FirstName3", "LastName3", "Email3", "PhoneNumber3", "Address3",
+                "Notes3");
 
         Mockito.when(cRepository.save(any(Client.class))).thenReturn(client3);
 
@@ -161,6 +161,28 @@ public class ClientServiceTest {
         // Assert
         assertThat(result).extracting(Client::getFirstName).isEqualTo("FirstName3");
         Mockito.verify(cRepository, Mockito.times(1)).save(client3);
+
+    }
+
+    @Test
+    @DisplayName("UpdateClient: Updates Client Details")
+    public void testUpdateClient() {
+        // Arrange
+
+        Long clientId = 1L;
+        Client updatedClient = new Client("Josh", "Crow", "Email1", "PhoneNumber1",
+                "Address1",
+                "Notes1");
+        Mockito.when(cRepository.findById(clientId)).thenReturn(Optional.of(client1));
+        Mockito.when(cRepository.save(client1)).thenReturn(client1);
+
+        // Act
+        Client result = cService.updateClient(clientId, updatedClient);
+        assertNotNull(result);
+
+        // Assert
+        assertThat(result).extracting(Client::getFirstName).isEqualTo("Josh");
+        Mockito.verify(cRepository, Mockito.times(1)).save(client1);
 
     }
 
