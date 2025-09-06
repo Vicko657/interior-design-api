@@ -45,12 +45,15 @@ public class Project extends AbstractEntity {
     public Room room; // Room foreign key
 
     // Project | Constructor
-    public Project(String projectName, Integer budget, String description, String meetingURL) {
+    public Project(String projectName, Integer budget, String description, String meetingURL, LocalDate startDate,
+            LocalDate dueDate) {
 
         this.projectName = projectName;
         this.budget = budget;
         this.description = description;
         this.meetingURL = meetingURL;
+        this.startDate = startDate;
+        this.dueDate = dueDate;
 
     }
 
