@@ -1,6 +1,7 @@
 package com.interiordesignplanner.project;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,6 +56,26 @@ public class ProjectServiceTest {
 
         // Assert
         assertThat(result).isEqualTo(projects);
+
+    }
+
+    @Test
+    @DisplayName("GetAllProjects: Returns all of the projects in the database")
+    public void testGetAllClientsAfterDetailsAreStored() {
+        // Arrange
+        List<Project> projects = new ArrayList<>();
+        projects.add(project1);
+        projects.add(project2);
+
+        // Act
+        Mockito.when(pRepository.findAll()).thenReturn(projects);
+        List<Project> result = pService.getAllProjects();
+
+        // Assert
+        assertThat(result).isEqualTo(projects);
+        assertThat(result).extracting(Project::getBudget).containsExactly(20000, 5000);
+        Mockito.verify(pRepository).findAll();
+        Mockito.verifyNoMoreInteractions(pRepository);
 
     }
 
