@@ -14,22 +14,33 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
+/**
+ * Provides shared properties for all entities. Stores the unique
+ * identifier (long) and timestamps for creation and updates.
+ * This entity is extended by Client, Project and Room entities
+ * to help with consistent auditing and reduce repetetive code.
+ */
+
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class) // Enables auditingentitylistener
+@EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractEntity {
 
+    // The entities auto generated primary key
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Entity's Id
+    private Long id;
 
-    // JPA Auditing
+    // Timestamp of the creation of the entity
     @JsonIgnore
     @CreatedDate
-    public Instant createdAt; // The date it was added on the system
+    public Instant createdAt;
+
+    // Timestamp of when the entity was last modified
     @JsonIgnore
     @LastModifiedDate
-    public Instant updatedAt; // Updates the date, each time data is modified
+    public Instant updatedAt;
 
+    // Unique identifier has a getter and cannot be set
     public Long getId() {
         return id;
     }

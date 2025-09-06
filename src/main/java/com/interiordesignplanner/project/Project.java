@@ -17,34 +17,53 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
+/**
+ * Models a design project for a client. Each project will have details
+ * such as the name, status, budget, meeting link and description.
+ * A project belongs to one client and can belong to one room and
+ * is extending the AbstractEntity class, which provides their unique
+ * identifier and timestamps for creation and updates to their data.
+ */
+
 @Entity
 @Table(name = "projects")
 public class Project extends AbstractEntity {
 
-    // Project | Instances
+    // Foreign key to Client entity, many to one bidirectional relationship.
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     @JsonBackReference
-    public Client client; // Clients foreign key
+    public Client client;
 
-    public String projectName; // The projects name
+    // Name of the project
+    public String projectName;
 
-    // Project Enum - The projects status default is planning
+    // Status of the project - Default: Planning
     @Enumerated(EnumType.STRING)
     public ProjectStatus status = ProjectStatus.PLANNING;
 
-    public Integer budget; // The budget for the project
-    public LocalDate startDate; // The date the project started
-    public LocalDate dueDate; // The projects deadline
-    public String description; // The description of the project
-    public String meetingURL; // The meeting link - gmeets
-    public Instant completedAt; // The date the project is completed
+    // Estimated cost of project
+    public Integer budget;
 
+    // The start date and due date to help with planning and progress tracking
+    public LocalDate startDate;
+    public LocalDate dueDate;
+
+    // Brief project description to help the designer have an overview
+    public String description;
+
+    // Video conference link for remote project meetings (Google Meets)
+    public String meetingURL;
+
+    // The timestamp of project completion
+    public Instant completedAt;
+
+    // Creates One to One Bidirectional relationship with the room entity
     @OneToOne(mappedBy = "project")
     @JsonManagedReference
-    public Room room; // Room foreign key
+    public Room room;
 
-    // Project | Constructor
+    // Constructor
     public Project(String projectName, Integer budget, String description, String meetingURL, LocalDate startDate,
             LocalDate dueDate) {
 
@@ -57,12 +76,13 @@ public class Project extends AbstractEntity {
 
     }
 
-    // Project | Parameterless constructor
+    // Parameterless constructor
     public Project() {
 
     }
 
-    // Project | Getters
+    // Getters
+    @Override
     public Long getId() {
         return super.getId();
     }
@@ -107,7 +127,7 @@ public class Project extends AbstractEntity {
         return room;
     }
 
-    // Project | Setters
+    // Setters
     public void setProjectName(String projectName) {
         this.projectName = projectName;
     }

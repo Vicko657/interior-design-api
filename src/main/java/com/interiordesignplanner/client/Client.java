@@ -10,24 +10,42 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+/**
+ * Models a Client of the interior designer. Stores the client's
+ * contact details and preferences to manage relationships.
+ * One client can have multiple projects and is extending the
+ * AbstractEntity class, which provides their unique identifier
+ * and timestamps for creation and updates to their data.
+ */
+
 @Entity
 @Table(name = "clients")
 public class Client extends AbstractEntity {
 
-    // Client | Instances
-    public String firstName; // Client's fullname
-    public String lastName; // Client's fullname
-    public String email; // Client's email address
-    public String phone; // Client's phone number
-    public String address; // Client's address
-    public String notes; // Notes specific for the Client
+    // Client's firstname
+    public String firstName;
 
-    // Creates One to many relationship with Project table
+    // Client's lastname
+    public String lastName;
+
+    // Client's email address
+    public String email;
+
+    // Client's phone number
+    public String phone;
+
+    // Client's full address including streetname, city and postcode
+    public String address;
+
+    // Notes on specific preferences for the client
+    public String notes;
+
+    // Creates One to Many Bidirectional relationship with the project entity
     @OneToMany(mappedBy = "client")
     @JsonManagedReference
     public List<Project> projects;
 
-    // Client | Constructor
+    // Constructor
     public Client(String firstName, String lastName, String email, String phone, String address, String notes) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -37,13 +55,12 @@ public class Client extends AbstractEntity {
         this.notes = notes;
     }
 
-    // Client | Parameterless constructor
+    // Parameterless constructor
     public Client() {
 
     }
 
-    // Client | Getters
-
+    // Getters
     @Override
     public Long getId() {
         return super.getId();
@@ -73,7 +90,7 @@ public class Client extends AbstractEntity {
         return notes;
     }
 
-    // Client | Setters
+    // Setters
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
