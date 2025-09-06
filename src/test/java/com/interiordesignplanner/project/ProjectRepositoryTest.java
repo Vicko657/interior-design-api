@@ -24,19 +24,21 @@ public class ProjectRepositoryTest {
     @Mock
     public ProjectRepository pRepository;
 
-    public Project ptest1;
-    public Project ptest2;
+    public Deadline dtest1;
+    public Deadline dtest2;
+    public Deadline dtest3;
     public Status stest3;
 
     @BeforeEach
     public void setUp() {
-        ptest1 = new Project("Industrial Loft Redesign", 20000,
-                "Exposed brick walls, metal fixtures, and reclaimed wood accents",
-                "https://meet.google.com/hyd-ken-csa",
-                LocalDate.of(2025, 07, 20), LocalDate.of(2026, 01, 25));
-        ptest2 = new Project("Luxury Master Bedroom", 5000,
-                "Custom wardrobes, soft lighting, and premium fabrics for a hotel-like feel.",
-                "https://meet.google.com/lhv-erf-oub", LocalDate.of(2025, 11, 10), LocalDate.of(2026, 5, 5));
+        dtest1 = new Deadline(LocalDate.of(2026, 1, 25), LocalDate.of(2025, 07, 20), "Industrial Loft Redesign",
+                ProjectStatus.ACTIVE, 10L, 18L);
+        dtest2 = new Deadline(LocalDate.of(2026, 5, 5), LocalDate.of(2025, 11, 10), "Luxury Master Bedroom",
+                ProjectStatus.PLANNING, 13L, 20L);
+        dtest3 = new Deadline(LocalDate.of(2026, 1, 10), LocalDate.of(2025, 7,
+                20),
+                "Scandinavian Living Room",
+                ProjectStatus.ON_HOLD, 13L, 21L);
         stest3 = new Status(ProjectStatus.ACTIVE, "Scandinavian Living Room", "Susan", "Vane",
                 LocalDate.of(2025, 7, 20), LocalDate.of(2026, 1, 10), 9000, "https://meet.google.com/mno-pqr-stu", null,
                 30L);
@@ -74,6 +76,25 @@ public class ProjectRepositoryTest {
         assertNotNull(result);
         assertTrue(result.isEmpty());
         Mockito.verify(pRepository).getByStatus(ProjectStatus.COMPLETED);
+
+    }
+
+    @Test
+    @DisplayName("findAllProjectsDue: Finds all projects with due date")
+    public void testfindAllProjectsDue_ReturnsProjects() {
+
+        // Arrange
+        Mockito.when(pRepository.findAllProjectsDueSoonOrderByDueDateAsc()).thenReturn(List.of(dtest3, dtest1, dtest2));
+
+        // Act
+        List<Deadline> result = pRepository.findAllProjectsDueSoonOrderByDueDateAsc();
+
+        // Assert
+        assertNotNull(result);
+        assertThat(result.get(0).dueDate()).isEqualTo(LocalDate.of(2026, 1, 10));
+        assertThat(result.get(1).dueDate()).isEqualTo(LocalDate.of(2026, 1, 25));
+        assertThat(result.get(2).dueDate()).isEqualTo(LocalDate.of(2026, 5, 5));
+        Mockito.verify(pRepository).findAllProjectsDueSoonOrderByDueDateAsc();
 
     }
 
