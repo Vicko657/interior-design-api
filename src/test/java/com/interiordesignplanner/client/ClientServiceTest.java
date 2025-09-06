@@ -3,6 +3,8 @@ package com.interiordesignplanner.client;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -105,6 +107,21 @@ public class ClientServiceTest {
 
         // Assert
         assertThat(exception.getMessage()).isEqualTo("No clients found with the lastname " + lastName);
+    }
+
+    @Test
+    @DisplayName("GetClient: Returns client by ID")
+    public void testGetClient() {
+        // Arrange
+        Long clientId = 3L;
+        Mockito.when(cRepository.findById(clientId)).thenReturn(Optional.of(client2));
+
+        // Act
+        Client result = cService.getClient(clientId);
+
+        // Assert
+        assertThat(result).isEqualTo(client2);
+        assertThat(result).extracting(Client::getFirstName).isEqualTo("FirstName2");
     }
 
     // Reset all mock objects
