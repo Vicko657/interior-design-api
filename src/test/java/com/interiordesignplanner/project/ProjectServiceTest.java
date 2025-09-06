@@ -32,6 +32,7 @@ public class ProjectServiceTest {
     public ClientService cService;
 
     public Project project1, project2;
+    public Status status1, status2;
 
     @BeforeEach
     public void setUp() {
@@ -43,6 +44,13 @@ public class ProjectServiceTest {
         project2 = new Project("Luxury Master Bedroom", 5000,
                 "Custom wardrobes, soft lighting, and premium fabrics for a hotel-like feel.",
                 "https://meet.google.com/lhv-erf-oub", LocalDate.of(2025, 11, 10), LocalDate.of(2026, 5, 5));
+
+        status1 = new Status(ProjectStatus.ACTIVE, "Scandinavian Living Room", "Susan", "Vane",
+                LocalDate.of(2025, 7, 20), LocalDate.of(2026, 1, 10), 9000, "https://meet.google.com/mno-pqr-stu", null,
+                30L);
+        status2 = new Status(ProjectStatus.ACTIVE, "Luxury Master Bedroom", "Jessica", "Cook",
+                LocalDate.of(2025, 11, 10), LocalDate.of(2026, 5, 5), 5000,
+                "https://meet.google.com/lhv-erf-oub", null, 25L);
 
     }
 
@@ -79,6 +87,23 @@ public class ProjectServiceTest {
         verify(pRepository).findAll();
         verifyNoMoreInteractions(pRepository);
 
+    }
+
+    @Test
+    @DisplayName("GetByStatusIgnoreCase: Returns projects with the same status")
+    public void testGetByStatusIgnoreCase() {
+
+        // Arrange
+        when(pRepository.getByStatus(ProjectStatus.ACTIVE)).thenReturn(List.of(status1, status2));
+
+        // Act
+        List<Status> result = pService.getProjectStatus("active");
+
+        // Assert
+        assertThat(result).hasSize(2);
+        assertThat(result).extracting(Status::projectName).containsExactly("Scandinavian Living Room",
+                "Luxury Master Bedroom");
+        verify(pRepository).getByStatus(ProjectStatus.ACTIVE);
     }
 
     // Reset all mock objects
