@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,18 +77,34 @@ public class ClientServiceTest {
     }
 
     @Test
-    @DisplayName("GetByLastNameIgnoreCase: Returns Client by LastName")
+    @DisplayName("GetByLastNameIgnoreCase: Returns client by lastname")
     public void testGetByLastNameIgnoreCase() {
         // Arrange
-        String LastName = "lastname1";
-        Mockito.when(cRepository.findByLastNameIgnoreCase(LastName)).thenReturn(List.of(client1));
+        String lastName = "lastname1";
+        Mockito.when(cRepository.findByLastNameIgnoreCase(lastName)).thenReturn(List.of(client1));
 
         // Act
-        List<Client> result = cService.getByLastNameIgnoreCase(LastName);
+        List<Client> result = cService.getByLastNameIgnoreCase(lastName);
 
         // Assert
         assertThat(result).isEqualTo(List.of(client1));
         assertThat(result).extracting(Client::getPhone).containsExactly("PhoneNumber1");
+    }
+
+    @Test
+    @DisplayName("GetByLastNameIgnoreCase: Client not found")
+    public void testGetByLastNameIgnoreCase_NotFound() {
+        // Arrange
+        String lastName = "lastName4";
+        Mockito.when(cRepository.findByLastNameIgnoreCase(lastName)).thenReturn(Collections.emptyList());
+
+        // Act
+        ClientNotFoundException exception = assertThrows(ClientNotFoundException.class, () -> {
+            cService.getByLastNameIgnoreCase(lastName);
+        });
+
+        // Assert
+        assertThat(exception.getMessage()).isEqualTo("No clients found with the lastname " + lastName);
     }
 
     // Reset all mock objects

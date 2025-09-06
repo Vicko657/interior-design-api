@@ -26,9 +26,13 @@ public class ClientService {
 
     public List<Client> getByLastNameIgnoreCase(String lastName) {
 
-        lastName.equalsIgnoreCase(lastName);
+        List<Client> clients = clientRepository.findByLastNameIgnoreCase(lastName);
 
-        return clientRepository.findByLastNameIgnoreCase(lastName);
+        if (clients.isEmpty()) {
+            throw new ClientNotFoundException(lastName);
+
+        }
+        return clients;
 
     }
 

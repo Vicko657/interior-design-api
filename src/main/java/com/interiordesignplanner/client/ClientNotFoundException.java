@@ -9,4 +9,9 @@ public class ClientNotFoundException extends RuntimeException {
 
     }
 
+    public ClientNotFoundException(String lastName) {
+        super(("No clients found with the lastname " + lastName));
+
+    }
+
 }
