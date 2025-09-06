@@ -1,5 +1,6 @@
 package com.interiordesignplanner.client;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -122,6 +123,23 @@ public class ClientServiceTest {
         // Assert
         assertThat(result).isEqualTo(client2);
         assertThat(result).extracting(Client::getFirstName).isEqualTo("FirstName2");
+    }
+
+    @Test
+    @DisplayName("GetClient: Client ID is not found")
+    public void testGetClient_NotFound() {
+        // Arrange
+        Long clientId = 3L;
+        Mockito.when(cRepository.findById(clientId)).thenReturn(Optional.empty());
+
+        // Act
+        ClientNotFoundException exception = assertThrows(ClientNotFoundException.class, () -> {
+            cService.getClient(clientId);
+        });
+
+        // Assert
+        assertThat(exception.getMessage())
+                .isEqualTo(MessageFormat.format("Client with {0} id was not found", clientId));
     }
 
     // Reset all mock objects
