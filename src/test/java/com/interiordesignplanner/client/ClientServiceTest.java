@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,7 +52,7 @@ public class ClientServiceTest {
     public void testGetAllClientsIntiallyEmpty() {
         // Arrange
         List<Client> clients = Collections.emptyList();
-        Mockito.when(cRepository.findAll()).thenReturn(clients);
+        when(cRepository.findAll()).thenReturn(clients);
 
         // Act
         List<Client> result = cService.getAllClients();
@@ -70,14 +70,14 @@ public class ClientServiceTest {
         clients.add(client1);
         clients.add(client2);
         // Act
-        Mockito.when(cRepository.findAll()).thenReturn(clients);
+        when(cRepository.findAll()).thenReturn(clients);
         List<Client> result = cService.getAllClients();
 
         // Assert
         assertThat(result).isEqualTo(clients);
         assertThat(result).extracting(Client::getFirstName).containsExactly("FirstName1", "FirstName2");
-        Mockito.verify(cRepository).findAll();
-        Mockito.verifyNoMoreInteractions(cRepository);
+        verify(cRepository).findAll();
+        verifyNoMoreInteractions(cRepository);
 
     }
 
@@ -86,7 +86,7 @@ public class ClientServiceTest {
     public void testGetByLastNameIgnoreCase() {
         // Arrange
         String lastName = "lastname1";
-        Mockito.when(cRepository.findByLastNameIgnoreCase(lastName)).thenReturn(List.of(client1));
+        when(cRepository.findByLastNameIgnoreCase(lastName)).thenReturn(List.of(client1));
 
         // Act
         List<Client> result = cService.getByLastNameIgnoreCase(lastName);
@@ -101,7 +101,7 @@ public class ClientServiceTest {
     public void testGetByLastNameIgnoreCase_NotFound() {
         // Arrange
         String lastName = "lastName4";
-        Mockito.when(cRepository.findByLastNameIgnoreCase(lastName)).thenReturn(Collections.emptyList());
+        when(cRepository.findByLastNameIgnoreCase(lastName)).thenReturn(Collections.emptyList());
 
         // Act
         ClientNotFoundException exception = assertThrows(ClientNotFoundException.class, () -> {
@@ -117,7 +117,7 @@ public class ClientServiceTest {
     public void testGetClient() {
         // Arrange
         Long clientId = 3L;
-        Mockito.when(cRepository.findById(clientId)).thenReturn(Optional.of(client2));
+        when(cRepository.findById(clientId)).thenReturn(Optional.of(client2));
 
         // Act
         Client result = cService.getClient(clientId);
@@ -132,7 +132,7 @@ public class ClientServiceTest {
     public void testGetClient_NotFound() {
         // Arrange
         Long clientId = 3L;
-        Mockito.when(cRepository.findById(clientId)).thenReturn(Optional.empty());
+        when(cRepository.findById(clientId)).thenReturn(Optional.empty());
 
         // Act
         ClientNotFoundException exception = assertThrows(ClientNotFoundException.class, () -> {
@@ -151,16 +151,15 @@ public class ClientServiceTest {
         Client client3 = new Client("FirstName3", "LastName3", "Email3", "PhoneNumber3", "Address3",
                 "Notes3");
 
-        Mockito.when(cRepository.save(any(Client.class))).thenReturn(client3);
+        when(cRepository.save(any(Client.class))).thenReturn(client3);
 
         // Act
         Client result = cService.createClient(client3);
         assertNotNull(result);
-        System.out.println(result);
 
         // Assert
         assertThat(result).extracting(Client::getFirstName).isEqualTo("FirstName3");
-        Mockito.verify(cRepository, Mockito.times(1)).save(client3);
+        verify(cRepository, times(1)).save(client3);
 
     }
 
@@ -173,8 +172,8 @@ public class ClientServiceTest {
         Client updatedClient = new Client("Josh", "Crow", "Email1", "PhoneNumber1",
                 "Address1",
                 "Notes1");
-        Mockito.when(cRepository.findById(clientId)).thenReturn(Optional.of(client1));
-        Mockito.when(cRepository.save(client1)).thenReturn(client1);
+        when(cRepository.findById(clientId)).thenReturn(Optional.of(client1));
+        when(cRepository.save(client1)).thenReturn(client1);
 
         // Act
         Client result = cService.updateClient(clientId, updatedClient);
@@ -182,7 +181,7 @@ public class ClientServiceTest {
 
         // Assert
         assertThat(result).extracting(Client::getFirstName).isEqualTo("Josh");
-        Mockito.verify(cRepository, Mockito.times(1)).save(client1);
+        verify(cRepository, times(1)).save(client1);
 
     }
 
@@ -191,21 +190,21 @@ public class ClientServiceTest {
     public void testDeleteClient() {
         // Arrange
         Long clientId = 1L;
-        Mockito.when(cRepository.existsById(clientId)).thenReturn(true);
+        when(cRepository.existsById(clientId)).thenReturn(true);
 
         // Act
         cService.deleteClient(clientId);
 
         // Assert
-        Mockito.verify(cRepository).existsById(clientId);
-        Mockito.verify(cRepository).deleteById(clientId);
+        verify(cRepository).existsById(clientId);
+        verify(cRepository).deleteById(clientId);
 
     }
 
     // Reset all mock objects
     @AfterEach
     public void tearDown() {
-        Mockito.reset(cRepository);
+        reset(cRepository);
     }
 
 }

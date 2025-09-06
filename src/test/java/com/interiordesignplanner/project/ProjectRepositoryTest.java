@@ -3,6 +3,7 @@ package com.interiordesignplanner.project;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,7 +49,7 @@ public class ProjectRepositoryTest {
     public void testGetByStatus_ReturnsProjects() {
 
         // Arrange
-        Mockito.when(pRepository.getByStatus(ProjectStatus.ACTIVE)).thenReturn(List.of(stest3));
+        when(pRepository.getByStatus(ProjectStatus.ACTIVE)).thenReturn(List.of(stest3));
 
         // Act
         List<Status> result = pRepository.getByStatus(ProjectStatus.ACTIVE);
@@ -58,7 +58,7 @@ public class ProjectRepositoryTest {
         assertNotNull(result);
         assertThat(1).isEqualTo(result.size());
         assertThat(stest3).isEqualTo(result.get(0));
-        Mockito.verify(pRepository).getByStatus(ProjectStatus.ACTIVE);
+        verify(pRepository).getByStatus(ProjectStatus.ACTIVE);
 
     }
 
@@ -67,7 +67,7 @@ public class ProjectRepositoryTest {
     public void testGetByStatus_ReturnsEmptyList() {
 
         // Arrange
-        Mockito.when(pRepository.getByStatus(ProjectStatus.COMPLETED)).thenReturn(Collections.emptyList());
+        when(pRepository.getByStatus(ProjectStatus.COMPLETED)).thenReturn(Collections.emptyList());
 
         // Act
         List<Status> result = pRepository.getByStatus(ProjectStatus.COMPLETED);
@@ -75,7 +75,7 @@ public class ProjectRepositoryTest {
         // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
-        Mockito.verify(pRepository).getByStatus(ProjectStatus.COMPLETED);
+        verify(pRepository).getByStatus(ProjectStatus.COMPLETED);
 
     }
 
@@ -84,7 +84,7 @@ public class ProjectRepositoryTest {
     public void testfindAllProjectsDue_ReturnsProjects() {
 
         // Arrange
-        Mockito.when(pRepository.findAllProjectsDueSoonOrderByDueDateAsc()).thenReturn(List.of(dtest3, dtest1, dtest2));
+        when(pRepository.findAllProjectsDueSoonOrderByDueDateAsc()).thenReturn(List.of(dtest3, dtest1, dtest2));
 
         // Act
         List<Deadline> result = pRepository.findAllProjectsDueSoonOrderByDueDateAsc();
@@ -94,14 +94,14 @@ public class ProjectRepositoryTest {
         assertThat(result.get(0).dueDate()).isEqualTo(LocalDate.of(2026, 1, 10));
         assertThat(result.get(1).dueDate()).isEqualTo(LocalDate.of(2026, 1, 25));
         assertThat(result.get(2).dueDate()).isEqualTo(LocalDate.of(2026, 5, 5));
-        Mockito.verify(pRepository).findAllProjectsDueSoonOrderByDueDateAsc();
+        verify(pRepository).findAllProjectsDueSoonOrderByDueDateAsc();
 
     }
 
     // Reset all mock objects
     @AfterEach
     public void tearDown() {
-        Mockito.reset(pRepository);
+        reset(pRepository);
     }
 
 }

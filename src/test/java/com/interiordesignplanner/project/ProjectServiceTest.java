@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.interiordesignplanner.client.ClientService;
@@ -49,7 +51,7 @@ public class ProjectServiceTest {
     public void testGetAllProjectsIntiallyEmpty() {
         // Arrange
         List<Project> projects = Collections.emptyList();
-        Mockito.when(pRepository.findAll()).thenReturn(projects);
+        when(pRepository.findAll()).thenReturn(projects);
 
         // Act
         List<Project> result = pService.getAllProjects();
@@ -68,15 +70,21 @@ public class ProjectServiceTest {
         projects.add(project2);
 
         // Act
-        Mockito.when(pRepository.findAll()).thenReturn(projects);
+        when(pRepository.findAll()).thenReturn(projects);
         List<Project> result = pService.getAllProjects();
 
         // Assert
         assertThat(result).isEqualTo(projects);
         assertThat(result).extracting(Project::getBudget).containsExactly(20000, 5000);
-        Mockito.verify(pRepository).findAll();
-        Mockito.verifyNoMoreInteractions(pRepository);
+        verify(pRepository).findAll();
+        verifyNoMoreInteractions(pRepository);
 
+    }
+
+    // Reset all mock objects
+    @AfterEach
+    public void tearDown() {
+        reset(pRepository);
     }
 
 }
