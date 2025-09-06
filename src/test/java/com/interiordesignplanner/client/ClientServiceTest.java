@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -140,6 +142,26 @@ public class ClientServiceTest {
         // Assert
         assertThat(exception.getMessage())
                 .isEqualTo(MessageFormat.format("Client with {0} id was not found", clientId));
+    }
+
+    @Test
+    @DisplayName("CreateClient: Adds a new Client")
+    public void testCreateClient() {
+        // Arrange
+        Client client3 = new Client("FirstName3", "LastName3", "Email3", "PhoneNumber4", "Address5",
+                "Notes6");
+
+        Mockito.when(cRepository.save(any(Client.class))).thenReturn(client3);
+
+        // Act
+        Client result = cService.createClient(client3);
+        assertNotNull(result);
+        System.out.println(result);
+
+        // Assert
+        assertThat(result).extracting(Client::getFirstName).isEqualTo("FirstName3");
+        Mockito.verify(cRepository, Mockito.times(1)).save(client3);
+
     }
 
     // Reset all mock objects
