@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
@@ -40,6 +42,7 @@ public class ClientController {
      */
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Retrieves all clients", description = "Retrieves all the clients details, including their name, email, phoneNo, address, projects and other details")
+    @ApiResponse(responseCode = "200", description = "All clients are found")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/clients", produces = "application/json")
     public List<Client> getAllClients() {
@@ -56,6 +59,9 @@ public class ClientController {
      */
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Finds client by ID", description = "Returns one clients details, including their name, email, phoneNo, address, projects and other details")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Client with id was found"),
+            @ApiResponse(responseCode = "404", description = "Client doesn't exist") })
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/clients/{id}", produces = "application/json")
     public Client getClient(@PathVariable Long id) {
@@ -73,9 +79,13 @@ public class ClientController {
      * @param lastName the client's lastname
      * @return client's entity
      * @response 200 if client was successfully found
+     * @response 404 not found is the client doesnt exist
      */
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Finds client by lastname", description = "Returns the client details, including their name, email, phoneNo, address, projects and other details")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Client with lastname was found"),
+        @ApiResponse(responseCode = "404", description = "Client doesn't exist") })
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/clients/lastName/{lastName}", produces = "application/json")
     public List<Client> getClientsByLastName(@PathVariable("lastName") String lastName) {
@@ -92,10 +102,13 @@ public class ClientController {
      * @param client the client's object to be created
      * @return saved client with generated unique identifier
      * @response 201 if client was successfully created
-     * @response 400 bad request is input data is invalid
+     * @response 404 bad request is input data is invalid
      */
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Create a new client", description = "Creates a new client and add's their details")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Client was created"),
+        @ApiResponse(responseCode = "404", description = "Client coloums have not been filled") })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/clients", produces = "application/json")
     public Client createClient(@RequestBody Client client) {
@@ -118,6 +131,9 @@ public class ClientController {
      */
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Update client", description = "Updates the client's records")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Client with id was updated"),
+        @ApiResponse(responseCode = "404", description = "Client doesn't exist") })
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/clients/{id}", produces = "application/json")
     public Client updateClient(@PathVariable Long id, @RequestBody Client updateClient) {
@@ -139,6 +155,9 @@ public class ClientController {
      */
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Deletes client", description = "Deletes the client's records")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Client with id was deleted"),
+        @ApiResponse(responseCode = "404", description = "Client doesn't exist") })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/clients/{id}", produces = "application/json")
     public void deleteClient(@PathVariable Long id) {
