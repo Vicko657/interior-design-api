@@ -61,7 +61,7 @@ public class ClientService {
      * @param lastName client's lastname
      * @throws ClientNotFoundException if the client is not found
      */
-    public List<Client> getByLastNameIgnoreCase(String lastName) {
+    public List<Client> getProjectsByLastName(String lastName) throws NoSuchElementException {
         List<Client> clients = clientRepository.findByLastNameIgnoreCase(lastName);
         if (clients.isEmpty()) {
             throw new ClientNotFoundException(lastName);

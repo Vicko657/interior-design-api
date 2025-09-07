@@ -79,14 +79,14 @@ public class ClientServiceTest {
     }
 
     @Test
-    @DisplayName("GetByLastNameIgnoreCase: Returns client by lastname")
-    public void testGetByLastNameIgnoreCase() {
+    @DisplayName("GetProjectsByLastName: Returns all client by lastname")
+    public void testGetProjectsByLastName() {
         // Arrange
         String lastName = "lastname1";
         when(cRepository.findByLastNameIgnoreCase(lastName)).thenReturn(List.of(client1));
 
         // Act
-        List<Client> result = cService.getByLastNameIgnoreCase(lastName);
+        List<Client> result = cService.getProjectsByLastName(lastName);
 
         // Assert
         assertThat(result).isEqualTo(List.of(client1));
@@ -102,7 +102,7 @@ public class ClientServiceTest {
 
         // Act
         ClientNotFoundException exception = assertThrows(ClientNotFoundException.class, () -> {
-            cService.getByLastNameIgnoreCase(lastName);
+            cService.getProjectsByLastName(lastName);
         });
 
         // Assert
