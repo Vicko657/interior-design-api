@@ -124,7 +124,7 @@ public class ProjectService {
      * @throws IllegalArgumentException the project fields are null
      */
     public Project createProject(Project project, Long clientId) throws IllegalArgumentException {
-        if (project == null) {
+        if (project == null && clientId == null) {
             throw new IllegalArgumentException("Project must not be null");
         }
         Client client = clientService.getClient(clientId);

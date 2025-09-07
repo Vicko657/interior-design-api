@@ -1,10 +1,12 @@
 package com.interiordesignplanner.room;
 
-import java.text.MessageFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Thrown when a room entity is not found in the interior design planner.
  */
+@ResponseStatus(code = HttpStatus.NOT_FOUND)
 public class RoomNotFoundException extends RuntimeException {
 
     /**
@@ -13,9 +15,15 @@ public class RoomNotFoundException extends RuntimeException {
      *
      * @param id is not found
      */
-    public RoomNotFoundException(Long id) {
-        super(MessageFormat.format("Rooom with {0} id was not found", id));
+    private final String message;
 
+    public RoomNotFoundException(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String getMessage() {
+        return String.join(":", super.getMessage(), this.message);
     }
 
 }

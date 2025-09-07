@@ -2,9 +2,7 @@ package com.interiordesignplanner.room;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -24,7 +22,6 @@ public interface RoomRepository extends ListCrudRepository<Room, Long> {
      * @return an {@link List} containing all the rooms with the specific type if
      *         found, otherwise empty
      */
-    @Query("select r from Room r where r.type = :type")
-    List<Room> getByType(@Param("type") RoomType type);
+    List<Room> findRoomsByType(RoomType type);
 
 }

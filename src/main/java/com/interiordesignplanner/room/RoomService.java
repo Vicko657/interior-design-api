@@ -1,9 +1,7 @@
 package com.interiordesignplanner.room;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,16 +54,24 @@ public class RoomService {
      * 
      * @param type room type enum
      * @returns rooms with same type
+     * @throws RoomNotFoundException if the room type is not found
      */
-    public List<Room> getType(String type) {
+    public List<Room> getRoomsByType(String type) throws RoomNotFoundException {
 
-        RoomType[] typesValues = RoomType.values();
-        for (RoomType type1 : typesValues) {
-            if (type1.name().equalsIgnoreCase(type)) {
-                return roomRepository.getByType(type1);
+        RoomType typeValues = null;
+
+        for (RoomType type1 : RoomType.values()) {
+            if (type1.name().equalsIgnoreCase(type.trim())) {
+                typeValues = type1;
+                break;
             }
         }
-        return null;
+
+        if (typeValues != null) {
+            return roomRepository.findRoomsByType(typeValues);
+        } else {
+            throw new RoomNotFoundException("Room with type: " + type + " was not found");
+        }
 
     }
 
@@ -80,9 +86,9 @@ public class RoomService {
      * @param id project's unique identifier
      * @throws RoomNotFoundException if the room is not found
      */
-    public Room getRoom(Long id) throws NoSuchElementException {
+    public Room getRoom(Long id) {
         return roomRepository.findById(id)
-                .orElseThrow(() -> new RoomNotFoundException(id));
+                .orElseThrow(() -> new RoomNotFoundException("Room with id: " + id + " was not found"));
     }
 
     /**
@@ -100,16 +106,12 @@ public class RoomService {
      * @return room with a generated unique Id
      */
     @Transactional
-    public Room addRoom(Room room, Long projectId) {
+    public Room addRoom(Room room, Long projectId) throws IllegalArgumentException {
         if (room == null && projectId == null) {
             throw new IllegalArgumentException("Room must not be null");
         }
 
-        if (room.getId() != null && roomRepository.existsById(room.getId())) {
-            throw new OptimisticLockingFailureException("ID" + room.getId() + "was not found");
-        }
         Project project = projectService.getProject(projectId);
-
         project.setRoom(room);
         room.setProject(project);
         projectService.saveProjectEntity(project);
@@ -126,18 +128,22 @@ public class RoomService {
      * 
      * @param id   room's unique identifier
      * @param room room object to be created
-     * @throws IllegalArgumentException if room fields are null
+     * @throws RoomNotFoundException if the room is not found
      * @return updates room
      */
-    public Room updateRoom(Long id, Room room) {
+    public Room updateRoom(Long id, Room room) throws RoomNotFoundException {
         Room existingRoomId = getRoom(id);
-        existingRoomId.setType(room.getType());
-        existingRoomId.setHeight(room.getHeight());
-        existingRoomId.setLength(room.getLength());
-        existingRoomId.setWidth(room.getWidth());
-        existingRoomId.setUnit(room.getUnit());
-        existingRoomId.setChecklist(room.getChecklist());
-        existingRoomId.setChanges(room.getChanges());
+        if (!roomRepository.existsById(id)) {
+            throw new RoomNotFoundException("Room with id " + id + " was not found");
+        } else {
+            existingRoomId.setType(room.getType());
+            existingRoomId.setHeight(room.getHeight());
+            existingRoomId.setLength(room.getLength());
+            existingRoomId.setWidth(room.getWidth());
+            existingRoomId.setUnit(room.getUnit());
+            existingRoomId.setChecklist(room.getChecklist());
+            existingRoomId.setChanges(room.getChanges());
+        }
         return roomRepository.save(existingRoomId);
     }
 
@@ -153,11 +159,15 @@ public class RoomService {
      * 
      * @param id room's unique identifier
      * @return deletes room details
+     * @throws RoomNotFoundException if the room doesnt exist
      */
-    public Room deleteRoom(Long id) {
-        Room room = getRoom(id);
+    public void deleteRoom(Long id) throws RoomNotFoundException {
+
+        if (!roomRepository.existsById(id)) {
+            throw new RoomNotFoundException("Room with id " + id + " was not found");
+        }
         roomRepository.deleteById(id);
-        return room;
+
     }
 
     /**
@@ -172,14 +182,19 @@ public class RoomService {
      * 
      * @param projectId project's unique identifier
      * @param roomId    room's unique identifier
+     * @throws RoomNotFoundException if the room doesnt exist
      * @return room is reassigned
      */
-    public Room reassignProject(Long projectId, Long roomId) {
+    public Room reassignProject(Long projectId, Long roomId) throws RoomNotFoundException {
 
         Room existingRoomId = getRoom(roomId);
         Project project = projectService.getProject(projectId);
-        project.setRoom(existingRoomId);
-        existingRoomId.setProject(project);
+        if (existingRoomId == null || projectId == null) {
+            throw new RoomNotFoundException("Room with id " + projectId + " was not found");
+        } else {
+            project.setRoom(existingRoomId);
+            existingRoomId.setProject(project);
+        }
         return roomRepository.save(existingRoomId);
     }
 
