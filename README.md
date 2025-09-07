@@ -81,7 +81,7 @@ Unit tests were created for the repositiory and service, to test out the functio
 
 **Javadocs**
 
-This use this file path to view the javadocs documentation:
+Use this file path to view the javadocs documentation:
 
 ```
 /interior-design-planner-api/target/reports/apidocs/index.html
