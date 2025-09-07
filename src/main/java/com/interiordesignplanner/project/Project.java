@@ -38,9 +38,9 @@ public class Project extends AbstractEntity {
     // Name of the project
     public String projectName;
 
-    // Status of the project - Default: Planning
+    // Status of the project
     @Enumerated(EnumType.STRING)
-    public ProjectStatus status = ProjectStatus.PLANNING;
+    public ProjectStatus status;
 
     // Estimated cost of project
     public Integer budget;
@@ -64,10 +64,12 @@ public class Project extends AbstractEntity {
     public Room room;
 
     // Constructor
-    public Project(String projectName, Integer budget, String description, String meetingURL, LocalDate startDate,
+    public Project(String projectName, ProjectStatus status, Integer budget, String description, String meetingURL,
+            LocalDate startDate,
             LocalDate dueDate) {
 
         this.projectName = projectName;
+        this.status = status;
         this.budget = budget;
         this.description = description;
         this.meetingURL = meetingURL;

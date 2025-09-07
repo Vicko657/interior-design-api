@@ -27,7 +27,7 @@ public class ProjectRepositoryTest {
     public Deadline dtest1;
     public Deadline dtest2;
     public Deadline dtest3;
-    public Status stest3;
+    public Project ptest3;
 
     @BeforeEach
     public void setUp() {
@@ -39,9 +39,9 @@ public class ProjectRepositoryTest {
                 20),
                 "Scandinavian Living Room",
                 ProjectStatus.ON_HOLD, 13L, 21L);
-        stest3 = new Status(ProjectStatus.ACTIVE, "Scandinavian Living Room", "Susan", "Vane",
-                LocalDate.of(2025, 7, 20), LocalDate.of(2026, 1, 10), 9000, "https://meet.google.com/mno-pqr-stu", null,
-                30L);
+        ptest3 = new Project("Luxury Master Bedroom", ProjectStatus.ACTIVE, 5000,
+                "Custom wardrobes, soft lighting, and premium fabrics for a hotel-like feel.",
+                "https://meet.google.com/lhv-erf-oub", LocalDate.of(2025, 11, 10), LocalDate.of(2026, 5, 5));
     }
 
     @Test
@@ -49,16 +49,16 @@ public class ProjectRepositoryTest {
     public void testGetByStatus_ReturnsProjects() {
 
         // Arrange
-        when(pRepository.getByStatus(ProjectStatus.ACTIVE)).thenReturn(List.of(stest3));
+        when(pRepository.findProjectsByStatus(ProjectStatus.ACTIVE)).thenReturn(List.of(ptest3));
 
         // Act
-        List<Status> result = pRepository.getByStatus(ProjectStatus.ACTIVE);
+        List<Project> result = pRepository.findProjectsByStatus(ProjectStatus.ACTIVE);
 
         // Assert
         assertNotNull(result);
         assertThat(1).isEqualTo(result.size());
-        assertThat(stest3).isEqualTo(result.get(0));
-        verify(pRepository).getByStatus(ProjectStatus.ACTIVE);
+        assertThat(ptest3).isEqualTo(result.get(0));
+        verify(pRepository).findProjectsByStatus(ProjectStatus.ACTIVE);
 
     }
 
@@ -67,15 +67,15 @@ public class ProjectRepositoryTest {
     public void testGetByStatus_ReturnsEmptyList() {
 
         // Arrange
-        when(pRepository.getByStatus(ProjectStatus.COMPLETED)).thenReturn(Collections.emptyList());
+        when(pRepository.findProjectsByStatus(ProjectStatus.COMPLETED)).thenReturn(Collections.emptyList());
 
         // Act
-        List<Status> result = pRepository.getByStatus(ProjectStatus.COMPLETED);
+        List<Project> result = pRepository.findProjectsByStatus(ProjectStatus.COMPLETED);
 
         // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
-        verify(pRepository).getByStatus(ProjectStatus.COMPLETED);
+        verify(pRepository).findProjectsByStatus(ProjectStatus.COMPLETED);
 
     }
 
@@ -84,17 +84,17 @@ public class ProjectRepositoryTest {
     public void testfindAllProjectsDue_ReturnsProjects() {
 
         // Arrange
-        when(pRepository.findAllProjectsDueSoonOrderByDueDateAsc()).thenReturn(List.of(dtest3, dtest1, dtest2));
+        when(pRepository.getAllProjectsOrderByDueDate()).thenReturn(List.of(dtest3, dtest1, dtest2));
 
         // Act
-        List<Deadline> result = pRepository.findAllProjectsDueSoonOrderByDueDateAsc();
+        List<Deadline> result = pRepository.getAllProjectsOrderByDueDate();
 
         // Assert
         assertNotNull(result);
         assertThat(result.get(0).dueDate()).isEqualTo(LocalDate.of(2026, 1, 10));
         assertThat(result.get(1).dueDate()).isEqualTo(LocalDate.of(2026, 1, 25));
         assertThat(result.get(2).dueDate()).isEqualTo(LocalDate.of(2026, 5, 5));
-        verify(pRepository).findAllProjectsDueSoonOrderByDueDateAsc();
+        verify(pRepository).getAllProjectsOrderByDueDate();
 
     }
 

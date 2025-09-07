@@ -84,8 +84,8 @@ public class ClientController {
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Finds client by lastname", description = "Returns the client details, including their name, email, phoneNo, address, projects and other details")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Client with lastname was found"),
-        @ApiResponse(responseCode = "404", description = "Client doesn't exist") })
+            @ApiResponse(responseCode = "200", description = "Client with lastname was found"),
+            @ApiResponse(responseCode = "404", description = "Client doesn't exist") })
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/clients/lastName/{lastName}", produces = "application/json")
     public List<Client> getClientsByLastName(@PathVariable("lastName") String lastName) {
@@ -107,8 +107,8 @@ public class ClientController {
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Create a new client", description = "Creates a new client and add's their details")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Client was created"),
-        @ApiResponse(responseCode = "404", description = "Client coloums have not been filled") })
+            @ApiResponse(responseCode = "201", description = "Client was created"),
+            @ApiResponse(responseCode = "404", description = "Client columns have not been filled") })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/clients", produces = "application/json")
     public Client createClient(@RequestBody Client client) {
@@ -132,8 +132,8 @@ public class ClientController {
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Update client", description = "Updates the client's records")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Client with id was updated"),
-        @ApiResponse(responseCode = "404", description = "Client doesn't exist") })
+            @ApiResponse(responseCode = "200", description = "Client with id was updated"),
+            @ApiResponse(responseCode = "404", description = "Client doesn't exist") })
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/clients/{id}", produces = "application/json")
     public Client updateClient(@PathVariable Long id, @RequestBody Client updateClient) {
@@ -156,8 +156,8 @@ public class ClientController {
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Deletes client", description = "Deletes the client's records")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Client with id was deleted"),
-        @ApiResponse(responseCode = "404", description = "Client doesn't exist") })
+            @ApiResponse(responseCode = "204", description = "Client with id was deleted"),
+            @ApiResponse(responseCode = "404", description = "Client doesn't exist") })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/clients/{id}", produces = "application/json")
     public void deleteClient(@PathVariable Long id) {

@@ -2,9 +2,7 @@ package com.interiordesignplanner.project;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.NoSuchElementException;
 
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import com.interiordesignplanner.client.Client;
@@ -38,6 +36,7 @@ public class ProjectService {
     public ProjectService(ProjectRepository projectRepository, ClientService clientService) {
         this.projectRepository = projectRepository;
         this.clientService = clientService;
+
     }
 
     /**
@@ -45,45 +44,6 @@ public class ProjectService {
      */
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
-    }
-
-    /**
-     * Finds all projects that have the same status, using the status record.
-     * 
-     * <p>
-     * Retrieves all projects that have the same status for progress tracking.
-     * 
-     * Custom query created in the repository.
-     * </p>
-     * 
-     * 
-     * @param status project status enum
-     * @returns projects with same status
-     */
-    public List<Status> getProjectStatus(String status) {
-        ProjectStatus[] statusValues = ProjectStatus.values();
-        for (ProjectStatus status1 : statusValues) {
-            if (status1.name().equalsIgnoreCase(status)) {
-                return projectRepository.getByStatus(status1);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Returns all projects in the order of due date, using the deadline record.
-     * 
-     * <p>
-     * Sorts all projects in order of due date to help,
-     * manage progress tracking and deadlines.
-     * 
-     * Custom query created in the repository.
-     * </p>
-     * 
-     * @returns order by due date
-     */
-    public List<Deadline> getAllProjectsDueSoonOrderByDueDateAsc() {
-        return projectRepository.findAllProjectsDueSoonOrderByDueDateAsc();
     }
 
     /**
@@ -98,9 +58,57 @@ public class ProjectService {
      * @param id project's unique identifier
      * @throws ProjectNotFoundException if the project is not found
      */
-    public Project getProject(Long id) throws NoSuchElementException {
+    public Project getProject(Long id) {
         return projectRepository.findById(id)
-                .orElseThrow(() -> new ProjectNotFoundException(id));
+                .orElseThrow(() -> new ProjectNotFoundException("Project with id: " + id + " was not found"));
+    }
+
+    /**
+     * Finds all projects that have the same status, using the status record.
+     * 
+     * <p>
+     * Retrieves all projects that have the same status for progress tracking.
+     * 
+     * </p>
+     * 
+     * 
+     * @param status project status enum
+     * @returns projects with same status
+     */
+    public List<Project> getProjectsByStatus(String status) throws ProjectNotFoundException {
+
+        ProjectStatus statusValues = null;
+
+        for (ProjectStatus status1 : ProjectStatus.values()) {
+            System.out.println("Checking enum: " + status1.name() + " against input: " + status);
+            if (status1.name().equalsIgnoreCase(status.trim())) {
+                statusValues = status1;
+                break;
+            }
+        }
+
+        if (statusValues != null) {
+            return projectRepository.findProjectsByStatus(statusValues);
+        } else {
+            throw new ProjectNotFoundException("Project with status: " + status + " was not found");
+        }
+
+    }
+
+    /**
+     * Returns all projects in the order of due date, using the deadline record.
+     * 
+     * <p>
+     * Sorts all projects in order of due date to help,
+     * manage progress tracking and deadlines.
+     * 
+     * Custom query created in the repository.
+     * </p>
+     * 
+     * @returns order by due date
+     */
+    public List<Deadline> sortsProjectsByDueDate() {
+        return projectRepository.getAllProjectsOrderByDueDate();
     }
 
     /**
@@ -115,13 +123,9 @@ public class ProjectService {
      * @param clientId client's unique identifier
      * @throws IllegalArgumentException the project fields are null
      */
-    public Project createProject(Project project, Long clientId) {
+    public Project createProject(Project project, Long clientId) throws IllegalArgumentException {
         if (project == null) {
             throw new IllegalArgumentException("Project must not be null");
-        }
-
-        if (project.getId() != null && projectRepository.existsById(project.getId())) {
-            throw new OptimisticLockingFailureException("ID" + project.getId() + "was not found");
         }
         Client client = clientService.getClient(clientId);
         project.setClient(client);
@@ -143,19 +147,25 @@ public class ProjectService {
      * @param project project object to be updated
      * @return updated project
      */
-    public Project updateProject(Long id, Project project) {
-        Project existingProjectId = getProject(id);
-        existingProjectId.setProjectName(project.getProjectName());
-        existingProjectId.setBudget(project.getBudget());
-        existingProjectId.setStatus(project.getStatus());
-        existingProjectId.setStartDate(project.getStartDate());
-        existingProjectId.setMeetingURL(project.getMeetingURL());
-        existingProjectId.setDueDate(project.getDueDate());
-        existingProjectId.setClient(project.getClient());
+    public Project updateProject(Long id, Project project) throws ProjectNotFoundException {
 
+        Project existingProjectId = getProject(id);
+
+        if (!projectRepository.existsById(id)) {
+            throw new ProjectNotFoundException("Project with id " + id + " was not found");
+        } else {
+            existingProjectId.setProjectName(project.getProjectName());
+            existingProjectId.setBudget(project.getBudget());
+            existingProjectId.setStatus(project.getStatus());
+            existingProjectId.setStartDate(project.getStartDate());
+            existingProjectId.setMeetingURL(project.getMeetingURL());
+            existingProjectId.setDueDate(project.getDueDate());
+            existingProjectId.setClient(project.getClient());
+
+        }
         // Updated Project Status to COMPLETED, sets completedAt field
         if (existingProjectId.getStatus() == ProjectStatus.COMPLETED
-                && existingProjectId.getCompletedAt() == null) {
+                || existingProjectId.getCompletedAt() == null) {
             existingProjectId.setCompletedAt(Instant.now());
         }
         return projectRepository.save(existingProjectId);
@@ -172,10 +182,11 @@ public class ProjectService {
      * @param id project's unique identifier
      * @return project is deleted
      */
-    public Project deleteProject(Long id) {
-        Project project = getProject(id);
+    public void deleteProject(Long id) throws ProjectNotFoundException {
+        if (!projectRepository.existsById(id)) {
+            throw new ProjectNotFoundException("Project with id " + id + " was not found");
+        }
         projectRepository.deleteById(id);
-        return project;
     }
 
     /**
@@ -183,7 +194,6 @@ public class ProjectService {
      * 
      * <p>
      * Use this method when a project was assigned to the wrong client and needs to
-     * 
      * be reassigned.
      * It will update the many to one relationship.
      * </p>
@@ -192,10 +202,15 @@ public class ProjectService {
      * @param projectId project's unique identifier
      * @return project is reassigned
      */
-    public Project reassignClient(Long clientId, Long projectId) {
+    public Project reassignClient(Long clientId, Long projectId)throws ProjectNotFoundException {
         Project existingProjectId = getProject(projectId);
         Client client = clientService.getClient(clientId);
-        existingProjectId.setClient(client);
+
+        if (existingProjectId == null || client == null) {
+            throw new ProjectNotFoundException("Project with id " + projectId + " was not found");
+        } else {
+            existingProjectId.setClient(client);
+        }
         return projectRepository.save(existingProjectId);
     }
 
@@ -204,7 +219,7 @@ public class ProjectService {
      * 
      * <p>
      * Creates the One to One relationship
-     * with Project, when the room is created.
+     * with Room, when the room is created.
      * </p>
      *
      * @param project project's object to be saved

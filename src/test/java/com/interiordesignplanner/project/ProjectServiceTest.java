@@ -32,25 +32,17 @@ public class ProjectServiceTest {
     public ClientService cService;
 
     public Project project1, project2;
-    public Status status1, status2;
 
     @BeforeEach
     public void setUp() {
         pService = new ProjectService(pRepository, cService);
-        project1 = new Project("Industrial Loft Redesign", 20000,
+        project1 = new Project("Industrial Loft Redesign", ProjectStatus.PLANNING, 20000,
                 "Exposed brick walls, metal fixtures, and reclaimed wood accents",
                 "https://meet.google.com/hyd-ken-csa",
                 LocalDate.of(2025, 07, 20), LocalDate.of(2026, 01, 25));
-        project2 = new Project("Luxury Master Bedroom", 5000,
+        project2 = new Project("Luxury Master Bedroom", ProjectStatus.ON_HOLD, 5000,
                 "Custom wardrobes, soft lighting, and premium fabrics for a hotel-like feel.",
                 "https://meet.google.com/lhv-erf-oub", LocalDate.of(2025, 11, 10), LocalDate.of(2026, 5, 5));
-
-        status1 = new Status(ProjectStatus.ACTIVE, "Scandinavian Living Room", "Susan", "Vane",
-                LocalDate.of(2025, 7, 20), LocalDate.of(2026, 1, 10), 9000, "https://meet.google.com/mno-pqr-stu", null,
-                30L);
-        status2 = new Status(ProjectStatus.ACTIVE, "Luxury Master Bedroom", "Jessica", "Cook",
-                LocalDate.of(2025, 11, 10), LocalDate.of(2026, 5, 5), 5000,
-                "https://meet.google.com/lhv-erf-oub", null, 25L);
 
     }
 
@@ -94,16 +86,16 @@ public class ProjectServiceTest {
     public void testGetByStatusIgnoreCase() {
 
         // Arrange
-        when(pRepository.getByStatus(ProjectStatus.ACTIVE)).thenReturn(List.of(status1, status2));
+        when(pRepository.findProjectsByStatus(ProjectStatus.ACTIVE)).thenReturn(List.of(project1, project2));
 
         // Act
-        List<Status> result = pService.getProjectStatus("active");
+        List<Project> result = pService.getProjectsByStatus("active");
 
         // Assert
         assertThat(result).hasSize(2);
-        assertThat(result).extracting(Status::projectName).containsExactly("Scandinavian Living Room",
+        assertThat(result).extracting(Project::getProjectName).containsExactly("Scandinavian Living Room",
                 "Luxury Master Bedroom");
-        verify(pRepository).getByStatus(ProjectStatus.ACTIVE);
+        verify(pRepository).findProjectsByStatus(ProjectStatus.ACTIVE);
     }
 
     // Reset all mock objects
