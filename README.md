@@ -63,8 +63,10 @@ cd interior-design-api
 
 ## 💡 MYSQL Database Connection:
 
+This use this file path to access the mysql_dump_file
+
 ```
-mySQLDumpFile
+/interior-design-api/Mysql_Dump_File
 ```
 
 ## 📏 📐 Testing
