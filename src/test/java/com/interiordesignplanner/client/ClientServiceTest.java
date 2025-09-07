@@ -86,7 +86,7 @@ public class ClientServiceTest {
         when(cRepository.findByLastNameIgnoreCase(lastName)).thenReturn(List.of(client1));
 
         // Act
-        List<Client> result = cService.getProjectsByLastName(lastName);
+        List<Client> result = cService.getClientsByLastName(lastName);
 
         // Assert
         assertThat(result).isEqualTo(List.of(client1));
@@ -102,7 +102,7 @@ public class ClientServiceTest {
 
         // Act
         ClientNotFoundException exception = assertThrows(ClientNotFoundException.class, () -> {
-            cService.getProjectsByLastName(lastName);
+            cService.getClientsByLastName(lastName);
         });
 
         // Assert

@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
@@ -62,8 +61,8 @@ public class ClientController {
     public Client getClient(@PathVariable Long id) {
         try {
             return clientService.getClient(id);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ClientNotFoundException e) {
+            throw new ClientNotFoundException(e.getMessage());
         }
 
     }
@@ -78,11 +77,11 @@ public class ClientController {
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Finds client by lastname", description = "Returns the client details, including their name, email, phoneNo, address, projects and other details")
     @GetMapping(value = "/clients/lastName/{lastName}", produces = "application/json")
-    public List<Client> getProjectsByLastName(@PathVariable("lastName") String lastName) {
+    public List<Client> getByLastNameIgnoreCase(@PathVariable("lastName") String lastName) {
         try {
-            return clientService.getProjectsByLastName(lastName);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            return clientService.getClientsByLastName(lastName);
+        } catch (ClientNotFoundException e) {
+            throw new ClientNotFoundException(e.getMessage());
         }
     }
 
@@ -125,8 +124,8 @@ public class ClientController {
 
         try {
             return clientService.updateClient(id, updateClient);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ClientNotFoundException e) {
+            throw new ClientNotFoundException(e.getMessage());
         }
     }
 
@@ -145,8 +144,8 @@ public class ClientController {
     public void deleteClient(@PathVariable Long id) {
         try {
             clientService.deleteClient(id);
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ClientNotFoundException e) {
+            throw new ClientNotFoundException(e.getMessage());
         }
     }
 

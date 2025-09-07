@@ -1,7 +1,6 @@
 package com.interiordesignplanner.client;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -45,9 +44,9 @@ public class ClientService {
      * @param id client's unique identifier
      * @throws ClientNotFoundException if the client is not found
      */
-    public Client getClient(Long id) throws NoSuchElementException {
+    public Client getClient(Long id) {
         return clientRepository.findById(id)
-                .orElseThrow(() -> new ClientNotFoundException(id));
+                .orElseThrow(() -> new ClientNotFoundException("Client with id " + id + " was not found"));
     }
 
     /**
@@ -61,10 +60,11 @@ public class ClientService {
      * @param lastName client's lastname
      * @throws ClientNotFoundException if the client is not found
      */
-    public List<Client> getProjectsByLastName(String lastName) throws NoSuchElementException {
+    public List<Client> getClientsByLastName(String lastName) throws ClientNotFoundException {
+
         List<Client> clients = clientRepository.findByLastNameIgnoreCase(lastName);
-        if (clients.isEmpty()) {
-            throw new ClientNotFoundException(lastName);
+        if (clients == null) {
+            throw new ClientNotFoundException("No clients found with the lastname" + lastName);
         }
         return clients;
     }
@@ -102,14 +102,21 @@ public class ClientService {
      * @param updateClient the client object is created
      * @return the updated client object
      */
-    public Client updateClient(Long id, Client updateClient) {
+    public Client updateClient(Long id, Client updateClient) throws ClientNotFoundException {
+
         Client existingClientId = getClient(id);
-        existingClientId.setFirstName(updateClient.getFirstName());
-        existingClientId.setLastName(updateClient.getLastName());
-        existingClientId.setEmail(updateClient.getEmail());
-        existingClientId.setPhone(updateClient.getPhone());
-        existingClientId.setAddress(updateClient.getAddress());
-        existingClientId.setNotes(updateClient.getNotes());
+
+        if (!clientRepository.existsById(id)) {
+            throw new ClientNotFoundException("Client with id " + id + " was not found");
+        } else {
+            existingClientId.setFirstName(updateClient.getFirstName());
+            existingClientId.setLastName(updateClient.getLastName());
+            existingClientId.setEmail(updateClient.getEmail());
+            existingClientId.setPhone(updateClient.getPhone());
+            existingClientId.setAddress(updateClient.getAddress());
+            existingClientId.setNotes(updateClient.getNotes());
+        }
+
         return clientRepository.save(existingClientId);
     }
 
@@ -124,9 +131,9 @@ public class ClientService {
      * @param id retrieves the client object to be deleted
      * @return client is removed
      */
-    public void deleteClient(Long id) {
+    public void deleteClient(Long id) throws ClientNotFoundException {
         if (!clientRepository.existsById(id)) {
-            throw new ClientNotFoundException(id);
+            throw new ClientNotFoundException("Client with id " + id + " was not found");
         }
         clientRepository.deleteById(id);
     }
