@@ -7,8 +7,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
-
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,10 +36,11 @@ public class ClientController {
      * GET: Returns all Clients
      * 
      * @return all clients entities on the system
-     * @response 201 if all clients are found
+     * @response 200 if all clients are found
      */
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Retrieves all clients", description = "Retrieves all the clients details, including their name, email, phoneNo, address, projects and other details")
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/clients", produces = "application/json")
     public List<Client> getAllClients() {
         return clientService.getAllClients();
@@ -57,6 +56,7 @@ public class ClientController {
      */
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Finds client by ID", description = "Returns one clients details, including their name, email, phoneNo, address, projects and other details")
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/clients/{id}", produces = "application/json")
     public Client getClient(@PathVariable Long id) {
         try {
@@ -76,8 +76,9 @@ public class ClientController {
      */
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Finds client by lastname", description = "Returns the client details, including their name, email, phoneNo, address, projects and other details")
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/clients/lastName/{lastName}", produces = "application/json")
-    public List<Client> getByLastNameIgnoreCase(@PathVariable("lastName") String lastName) {
+    public List<Client> getClientsByLastName(@PathVariable("lastName") String lastName) {
         try {
             return clientService.getClientsByLastName(lastName);
         } catch (ClientNotFoundException e) {
@@ -103,8 +104,6 @@ public class ClientController {
             return clientService.createClient(client);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        } catch (OptimisticLockingFailureException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -114,11 +113,12 @@ public class ClientController {
      * @param id           the client's unique identifier
      * @param updateClient the client's object to be updated
      * @return updated client entity
-     * @response 201 if client was successfully updated
+     * @response 200 if client was successfully updated
      * @response 404 not found is the client doesnt exist
      */
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Update client", description = "Updates the client's records")
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping(value = "/clients/{id}", produces = "application/json")
     public Client updateClient(@PathVariable Long id, @RequestBody Client updateClient) {
 
@@ -139,8 +139,8 @@ public class ClientController {
      */
     @Tag(name = "clients", description = "Information about the clients")
     @Operation(summary = "Deletes client", description = "Deletes the client's records")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/clients/{id}", produces = "application/json")
-    @ResponseStatus(HttpStatus.OK)
     public void deleteClient(@PathVariable Long id) {
         try {
             clientService.deleteClient(id);

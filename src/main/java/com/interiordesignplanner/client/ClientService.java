@@ -2,7 +2,6 @@ package com.interiordesignplanner.client;
 
 import java.util.List;
 
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -81,12 +80,9 @@ public class ClientService {
      * @return client with a generated unique Id
      * @throws IllegalArgumentException if the client fields is null
      */
-    public Client createClient(Client client) {
+    public Client createClient(Client client) throws IllegalArgumentException {
         if (client == null) {
-            throw new IllegalArgumentException("Client must not be null");
-        }
-        if (client.getId() != null && clientRepository.existsById(client.getId())) {
-            throw new OptimisticLockingFailureException("ID" + client.getId() + "was not found");
+            throw new IllegalArgumentException("Clients should not have a Id");
         }
         return clientRepository.save(client);
     }
@@ -100,6 +96,7 @@ public class ClientService {
      * </p>
      * 
      * @param updateClient the client object is created
+     * @throws ClientNotFoundException if the client is not found
      * @return the updated client object
      */
     public Client updateClient(Long id, Client updateClient) throws ClientNotFoundException {
@@ -129,6 +126,7 @@ public class ClientService {
      * </p>
      * 
      * @param id retrieves the client object to be deleted
+     * @throws ClientNotFoundException if the client is not found
      * @return client is removed
      */
     public void deleteClient(Long id) throws ClientNotFoundException {
