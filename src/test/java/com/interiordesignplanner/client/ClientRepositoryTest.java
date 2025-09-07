@@ -19,10 +19,20 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * Unit tests for {@link ClientRepository}.
+ *
+ * <p>
+ * This class verifies the persistence and retrieval of {@link Client} entities.
+ * It focuses on repository-level behavior including:
+ * <p>
+ * The tests use mocked repository behavior.
+ */
 @ExtendWith(MockitoExtension.class)
 @DisplayName(value = "Client Repository Test Suite")
 public class ClientRepositoryTest {
 
+    // Mock client repository
     @Mock
     public ClientRepository cRepository;
 
@@ -32,6 +42,7 @@ public class ClientRepositoryTest {
 
     @BeforeEach
     public void setUp() {
+        // Created mock client tests
         ctest1 = new Client("Jessica", "Cook", "jessicacook@gmail.com", "07314708068", "33 Elm Street, London, N2R 652",
                 "Prefers eco-friendly materials");
         ctest2 = new Client("Alex", "Price", "aprice@gmail.com", "07828096962", "249 The Grove, Reading, R84 J5N",
@@ -41,11 +52,14 @@ public class ClientRepositoryTest {
                 "Loves minimalist design");
     }
 
+    /**
+     * Tests if the Client can be found with their lastname and different case
+     */
     @Test
     @DisplayName("FindByLastName: Finds client by lastname and ignorescase")
     public void testfindByLastNameIgnoreCase_ReturnsSameClient() {
 
-        // Arrange
+        // Arrange: Prepare test clients mapped to last names in different cases
         Map<String, List<Client>> test = new HashMap<>();
         test.put("cook", List.of(ctest1));
         test.put("PRICE", List.of(ctest2));
@@ -56,30 +70,36 @@ public class ClientRepositoryTest {
             String lastName = entry.getKey();
             List<Client> expectedClients = entry.getValue();
 
+            // Mock repository behavior
             when(cRepository.findByLastNameIgnoreCase(lastName)).thenReturn(expectedClients);
 
-            // Act
+            // Act: Query repository with each last name
             List<Client> result = cRepository.findByLastNameIgnoreCase(lastName);
 
-            // Assert
+            // Assert: Verify results match expected clients, ignoring case
             assertNotNull(result);
             assertEquals(expectedClients.size(), result.size());
             assertEquals(expectedClients, result);
+
         }
 
     }
 
+    /**
+     * Tests when the Client isnt found by LastName and returns a empty set
+     */
     @Test
     @DisplayName("FindByLastName: Client isnt found by lastname and ignorescase")
     public void testfindByLastNameIgnoreCase_ReturnsEmptyList() {
 
-        // Arrange
+        // Arrange: Mock Repository to test a different if the client with last name
+        // ("Brown") is found
         when(cRepository.findByLastNameIgnoreCase("Brown")).thenReturn(Collections.emptyList());
 
-        // Act
+        // Act: Query the repository the lastname ("Brown")
         List<Client> result = cRepository.findByLastNameIgnoreCase("Brown");
 
-        // Assert
+        // Assert: result is not null, is empty and repository was called
         assertNotNull(result);
         assertTrue(result.isEmpty());
         verify(cRepository).findByLastNameIgnoreCase("Brown");

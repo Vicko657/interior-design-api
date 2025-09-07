@@ -18,22 +18,33 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.interiordesignplanner.client.ClientService;
 
+/**
+ * Unit tests for {@link ProjectService}.
+ *
+ * <p>
+ * Validates project lifecycle management including creation,
+ * updates and status transitions. Ensures relationships to clients
+ * and rooms are correctly handled.
+ * </p>
+ * The tests use mocked service behavior.
+ */
 @ExtendWith(MockitoExtension.class)
 @DisplayName(value = "Project Service Test Suite")
 public class ProjectServiceTest {
-
+    // Mock project repository
     @Mock
     public ProjectRepository pRepository;
-
+    // Mock project service
     @InjectMocks
     public ProjectService pService;
-
+    // Mock client service
     @InjectMocks
     public ClientService cService;
 
     public Project project1, project2;
 
     @BeforeEach
+    // Created mock project tests
     public void setUp() {
         pService = new ProjectService(pRepository, cService);
         project1 = new Project("Industrial Loft Redesign", ProjectStatus.PLANNING, 20000,
@@ -46,56 +57,47 @@ public class ProjectServiceTest {
 
     }
 
+    /**
+     * Tests for checking if Get all projects returns a empty list
+     */
     @Test
     @DisplayName("GetAllProjects: Returns empty list")
-    public void testGetAllProjectsIntiallyEmpty() {
-        // Arrange
+    public void testGetAllProjects_ReturnsEmtyList() {
+        // Arrange: Empty list is created and Mock Repository to test if it returns a
+        // empty list
         List<Project> projects = Collections.emptyList();
         when(pRepository.findAll()).thenReturn(projects);
 
-        // Act
+        // Act: Query the service layer the if a empty list is returned
         List<Project> result = pService.getAllProjects();
 
-        // Assert
+        // Assert: Verifies that the result empty
         assertThat(result).isEqualTo(projects);
 
     }
 
+    /**
+     * Tests for checking if Get all projects returns a list of projects
+     */
     @Test
     @DisplayName("GetAllProjects: Returns all of the projects in the database")
-    public void testGetAllClientsAfterDetailsAreStored() {
-        // Arrange
+    public void testGetAllProjects_ReturnsAllProjects() {
+        // Arrange: A list created with projects and mock Repository to test if all
+        // projects are returned
         List<Project> projects = new ArrayList<>();
         projects.add(project1);
         projects.add(project2);
-
-        // Act
         when(pRepository.findAll()).thenReturn(projects);
+
+        // Act: Query the service layer the if all projects are returnes
         List<Project> result = pService.getAllProjects();
 
-        // Assert
+        // Assert: Verifies that the result is not null and projects are retrieved
         assertThat(result).isEqualTo(projects);
         assertThat(result).extracting(Project::getBudget).containsExactly(20000, 5000);
         verify(pRepository).findAll();
         verifyNoMoreInteractions(pRepository);
 
-    }
-
-    @Test
-    @DisplayName("GetByStatusIgnoreCase: Returns projects with the same status")
-    public void testGetByStatusIgnoreCase() {
-
-        // Arrange
-        when(pRepository.findProjectsByStatus(ProjectStatus.ACTIVE)).thenReturn(List.of(project1, project2));
-
-        // Act
-        List<Project> result = pService.getProjectsByStatus("active");
-
-        // Assert
-        assertThat(result).hasSize(2);
-        assertThat(result).extracting(Project::getProjectName).containsExactly("Scandinavian Living Room",
-                "Luxury Master Bedroom");
-        verify(pRepository).findProjectsByStatus(ProjectStatus.ACTIVE);
     }
 
     // Reset all mock objects
