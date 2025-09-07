@@ -61,13 +61,27 @@ cd interior-design-api
 ./mvnw spring-boot:run
 ```
 
-## 📏 📐 Run the tests
+## 💡 MYSQL Database Connection:
+
+## 📏 📐 Testing
+
+Unit tests were created for the repositiory and service, to test out the functionalities of the methods used and to check for any vulnerabilities.
 
 ```
 ./mvnw clean test
 ```
 
 ## 🛋️ API Documentation
+
+**Javadocs**
+
+This is the link to view the javadocs documentation:
+
+```
+
+```
+
+**Swagger:**
 
 When the API is running you can check the **Swagger UI** documentation through this link:
 
@@ -76,3 +90,91 @@ http://localhost:8080/swagger-ui-interior-design-planner.html
 ```
 
 ## 🏘️ API Endpoints
+
+Th Interior Design Planner API provides different endpoints to help the designer manage their interior design projects with their clients.
+
+The entity relationships between the three entities: Client, Project and Room will allow the interior designer to perform CRUD operations on each entity, as well as query data.
+
+Here are some examples of the endpoints used in the API:
+
+### 💁🏾‍♀️ Clients Endpoints
+
+<hr>
+
+**Creates a new Client**
+
+- HTTP Method: POST
+
+- Creates a new Client on the system. It should return their details such as their name, email, phone number, address and projects.
+
+```
+/clients
+```
+
+**Finds Client by Lastname**
+
+- HTTP Method: GET
+
+- Retrieves clients by last name. Returns a list of matching clients or an empty list.
+
+```
+/clients/lastName/{lastName}
+```
+
+</br>
+
+### 🗂️ Project Endpoints
+
+<hr>
+
+**Find Projects by Status**
+
+- HTTP Method: GET
+
+- Retrieves all projects with the specified status. The statuses are Enums and are case-insensitive.
+
+```
+/projects/status/{status}
+```
+
+#### **Orders Projects by deadline**
+
+- HTTP Method: GET
+
+- Retrieves all projects ordered by their dueDate in ascending order.
+
+```
+/projects/deadlines
+```
+
+</br>
+
+### 🛌 Rooms Endpoints
+
+<hr>
+
+**Find Rooms by Room Type**
+
+- HTTP Method: GET
+
+- Retrieves all rooms with the specified type. The type are Enums and are case-insensitive.
+
+```
+/rooms/type/{type}
+```
+
+**Reassigns Room with a different project**
+
+- HTTP Method: PATCH
+
+- Reassign a room to a different project, keeping the one to one relationship.
+
+```
+/rooms/{roomId}/projects/{projectId}
+```
+
+<br>
+
+## ⚠️ Error Handling
+
+The API uses standard HTTP status codes to indicate errors. Custom exceptions for each entity (e.g ClientNotFoundException) are thrown when a resource is missing or a request is invalid. Spring automatically returns the corresponding status code (e.g., 404 Not Found, 400 Bad Request) along with a descriptive error message.

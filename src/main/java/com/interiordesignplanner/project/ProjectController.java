@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * 
  * API endpoints to complete CRUD operations.
  */
-@RestController()
+@RestController
 public class ProjectController {
 
     // Project Service layer
@@ -184,7 +184,7 @@ public class ProjectController {
     @Operation(summary = "Project deadlines", description = "Returns the projects in order of deadline")
     @ApiResponse(responseCode = "200", description = "All projects are found")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/projects/deadline", produces = "application/json")
+    @GetMapping(value = "/projects/deadlines", produces = "application/json")
     public List<Deadline> sortsProjectsByDueDate() {
         return projectService.sortsProjectsByDueDate();
     }
