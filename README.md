@@ -63,6 +63,10 @@ cd interior-design-api
 
 ## 💡 MYSQL Database Connection:
 
+```
+mySQLDumpFile
+```
+
 ## 📏 📐 Testing
 
 Unit tests were created for the repositiory and service, to test out the functionalities of the methods used and to check for any vulnerabilities.
@@ -75,10 +79,12 @@ Unit tests were created for the repositiory and service, to test out the functio
 
 **Javadocs**
 
-This is the link to view the javadocs documentation:
+This use this file path to view the javadocs documentation:
 
 ```
+interior-design-api/target/reports/apidocs/index.html
 
+./mvnw javadoc:javadoc
 ```
 
 **Swagger:**
