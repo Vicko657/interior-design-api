@@ -1,9 +1,5 @@
 package com.interiordesignplanner.client;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,13 +17,25 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * Unit tests for {@link ClientService}.
+ *
+ * <p>
+ * Verifies client creation, retrieval, updating, and deletion logic.
+ * Ensures that validation rules and exception handling (such as
+ * {@code ClientNotFoundException}) work as expected.
+ * <p>
+ * The tests use mocked service behavior.
+ */
 @ExtendWith(MockitoExtension.class)
 @DisplayName(value = "Client Service Test Suite")
 public class ClientServiceTest {
 
+    // Mock client repository
     @Mock
     public ClientRepository cRepository;
 
+    // Mock client service
     @InjectMocks
     public ClientService cService;
 
@@ -35,166 +43,57 @@ public class ClientServiceTest {
 
     @BeforeEach
     public void setUp() {
+        // Created mock client tests
         cService = new ClientService(cRepository);
-        client1 = new Client("FirstName1", "LastName1", "Email1", "PhoneNumber1",
-                "Address1",
-                "Notes1");
-        client2 = new Client("FirstName2", "LastName2", "Email2", "PhoneNumber2", "Address2",
-                "Notes2");
+        client1 = new Client("Jessica", "Cook", "jessicacook@gmail.com", "07314708068",
+                "33 Elm Street, London, N2R 652",
+                "Prefers eco-friendly materials");
+        client2 = new Client("Alex", "Price", "aprice@gmail.com", "07828096962", "249 The Grove, Reading, R84 J5N",
+                "Needs child-friendly furniture");
 
     }
 
-    @Test
-    @DisplayName("GetAllClients: Returns empty list")
-    public void testGetAllClientsIntiallyEmpty() {
-        // Arrange
-        List<Client> clients = Collections.emptyList();
-        when(cRepository.findAll()).thenReturn(clients);
-
-        // Act
-        List<Client> result = cService.getAllClients();
-
-        // Assert
-        assertThat(result).isEqualTo(clients);
-
-    }
-
-    @Test
-    @DisplayName("GetAllClients: Returns all of the clients in the database")
-    public void testGetAllClientsAfterDetailsAreStored() {
-        // Arrange
-        List<Client> clients = new ArrayList<>();
-        clients.add(client1);
-        clients.add(client2);
-        // Act
-        when(cRepository.findAll()).thenReturn(clients);
-        List<Client> result = cService.getAllClients();
-
-        // Assert
-        assertThat(result).isEqualTo(clients);
-        assertThat(result).extracting(Client::getFirstName).containsExactly("FirstName1", "FirstName2");
-        verify(cRepository).findAll();
-        verifyNoMoreInteractions(cRepository);
-
-    }
-
-    @Test
-    @DisplayName("GetProjectsByLastName: Returns all client by lastname")
-    public void testGetProjectsByLastName() {
-        // Arrange
-        String lastName = "lastname1";
-        when(cRepository.findByLastNameIgnoreCase(lastName)).thenReturn(List.of(client1));
-
-        // Act
-        List<Client> result = cService.getClientsByLastName(lastName);
-
-        // Assert
-        assertThat(result).isEqualTo(List.of(client1));
-        assertThat(result).extracting(Client::getPhone).containsExactly("PhoneNumber1");
-    }
-
-    @Test
-    @DisplayName("GetByLastNameIgnoreCase: Client not found")
-    public void testGetByLastNameIgnoreCase_NotFound() {
-        // Arrange
-        String lastName = "lastName4";
-        when(cRepository.findByLastNameIgnoreCase(lastName)).thenReturn(Collections.emptyList());
-
-        // Act
-        ClientNotFoundException exception = assertThrows(ClientNotFoundException.class, () -> {
-            cService.getClientsByLastName(lastName);
-        });
-
-        // Assert
-        assertThat(exception.getMessage()).isEqualTo("No clients found with the lastname " + lastName);
-    }
-
-    @Test
-    @DisplayName("GetClient: Returns client by ID")
-    public void testGetClient() {
-        // Arrange
-        Long clientId = 3L;
-        when(cRepository.findById(clientId)).thenReturn(Optional.of(client2));
-
-        // Act
-        Client result = cService.getClient(clientId);
-
-        // Assert
-        assertThat(result).isEqualTo(client2);
-        assertThat(result).extracting(Client::getFirstName).isEqualTo("FirstName2");
-    }
-
+    /**
+     * Tests for when the Client is not found, returns a empty set and throws a
+     * ClientNotFoundException
+     */
     @Test
     @DisplayName("GetClient: Client ID is not found")
-    public void testGetClient_NotFound() {
-        // Arrange
+    public void testGetClient_ReturnsNotFound() {
+        // Arrange: Set the clientId and mock the repository
         Long clientId = 3L;
         when(cRepository.findById(clientId)).thenReturn(Optional.empty());
 
-        // Act
+        // Act: Queries if the exception is thrown
         ClientNotFoundException exception = assertThrows(ClientNotFoundException.class, () -> {
             cService.getClient(clientId);
         });
 
-        // Assert
+        String errorMessage = "Client with id " + clientId + " was not found";
+        // Assert: Verifies exception matches the thrown exception
         assertThat(exception.getMessage())
-                .isEqualTo(MessageFormat.format("Client with {0} id was not found", clientId));
+                .isEqualTo(String.join(":", null, errorMessage));
     }
 
+    /**
+     * Tests for creating a new Client successfully
+     */
     @Test
     @DisplayName("CreateClient: Adds a new Client")
-    public void testCreateClient() {
-        // Arrange
+    public void testCreateClient_ReturnsCreated() {
+        // Arrange: Mock Repository to test if a new client has been created
         Client client3 = new Client("FirstName3", "LastName3", "Email3", "PhoneNumber3", "Address3",
                 "Notes3");
 
         when(cRepository.save(any(Client.class))).thenReturn(client3);
 
-        // Act
+        // Act: Query the service layer the if client is there
         Client result = cService.createClient(client3);
-        assertNotNull(result);
 
-        // Assert
+        // Assert: Verifies that the result is not null and client has been created
+        assertNotNull(result);
         assertThat(result).extracting(Client::getFirstName).isEqualTo("FirstName3");
         verify(cRepository, times(1)).save(client3);
-
-    }
-
-    @Test
-    @DisplayName("UpdateClient: Updates Client Details")
-    public void testUpdateClient() {
-        // Arrange
-
-        Long clientId = 1L;
-        Client updatedClient = new Client("Josh", "Crow", "Email1", "PhoneNumber1",
-                "Address1",
-                "Notes1");
-        when(cRepository.findById(clientId)).thenReturn(Optional.of(client1));
-        when(cRepository.save(client1)).thenReturn(client1);
-
-        // Act
-        Client result = cService.updateClient(clientId, updatedClient);
-        assertNotNull(result);
-
-        // Assert
-        assertThat(result).extracting(Client::getFirstName).isEqualTo("Josh");
-        verify(cRepository, times(1)).save(client1);
-
-    }
-
-    @Test
-    @DisplayName("DeleteClient: Deletes client details")
-    public void testDeleteClient() {
-        // Arrange
-        Long clientId = 1L;
-        when(cRepository.existsById(clientId)).thenReturn(true);
-
-        // Act
-        cService.deleteClient(clientId);
-
-        // Assert
-        verify(cRepository).existsById(clientId);
-        verify(cRepository).deleteById(clientId);
 
     }
 

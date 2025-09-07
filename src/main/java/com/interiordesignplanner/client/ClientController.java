@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * 
  * API endpoints to complete CRUD operations.
  */
-@RestController("api/")
+@RestController
 public class ClientController {
 
     // Client Service layer
