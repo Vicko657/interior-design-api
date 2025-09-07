@@ -40,13 +40,13 @@ A lightweight planner that helps **Interior designers** to organise projects fro
 1. Clone the repository
 
 ```
- git clone https://github.com/Vicko657/interior-design-api.git
+ git clone https://github.com/Vicko657/interior-design-planner-api.git
 ```
 
 2. Go to the project directory
 
 ```javascript
-cd interior-design-api
+cd interior-design-planner-api
 ```
 
 3. Build the project using Maven
@@ -63,10 +63,10 @@ cd interior-design-api
 
 ## 💡 MYSQL Database Connection:
 
-This use this file path to access the mysql_dump_file
+Use this file path to access the (Mysql_Dump_File)
 
 ```
-/interior-design-api/Mysql_Dump_File
+/interior-design-planner-api/Mysql_Dump_File
 ```
 
 ## 📏 📐 Testing
@@ -84,7 +84,7 @@ Unit tests were created for the repositiory and service, to test out the functio
 This use this file path to view the javadocs documentation:
 
 ```
-interior-design-api/target/reports/apidocs/index.html
+/interior-design-planner-api/target/reports/apidocs/index.html
 
 ./mvnw javadoc:javadoc
 ```
