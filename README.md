@@ -55,7 +55,7 @@ cd interior-design-planner-api
 ./mvnw clean install
 ```
 
-4.  Run the application
+4.  Run the application **(Make sure you have the MYSQL Database Connection setup)**
 
 ```
 ./mvnw spring-boot:run
@@ -67,6 +67,34 @@ Use this file path to access the (Mysql_Dump_File)
 
 ```
 /interior-design-planner-api/Mysql_Dump_File
+```
+
+In your terminal sign in to mysql and create a database
+
+```
+mysql -u username -p
+
+CREATE DATABASE interiordesignplanner;
+exit;
+```
+
+Import the (Mysql_Dump_File.sql)
+
+```
+mysql -u username -p interiordesignplanner < /interior-design-planner-api/Mysql_Dump_File.sql
+```
+
+Create a local.properties file in the resources folder /interior-design-planner-api/src/main/resources
+
+```
+# Replace "url" with your database url
+spring.datasource.url=jdbc:mysql:"url"
+
+# Replace "root" with your database user
+spring.datasource.username="root"
+
+# Specify your database user's password
+spring.datasource.password="password"
 ```
 
 ## 📏 📐 Testing
