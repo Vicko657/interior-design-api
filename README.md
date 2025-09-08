@@ -88,7 +88,7 @@ Create a local.properties file in the resources folder /interior-design-planner-
 
 ```
 # Replace "url" with your database url
-spring.datasource.url=jdbc:mysql:"url"
+spring.datasource.url=jdbc:mysql:jdbc:mysql://localhost:3306/interiordesignplanner
 
 # Replace "root" with your database user
 spring.datasource.username="root"
