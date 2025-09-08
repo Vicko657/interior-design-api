@@ -99,7 +99,7 @@ http://localhost:8080/swagger-ui-interior-design-planner.html
 
 ## 🏘️ API Endpoints
 
-Th Interior Design Planner API provides different endpoints to help the designer manage their interior design projects with their clients.
+The Interior Design Planner API provides different endpoints to help the designer manage their interior design projects with their clients.
 
 The entity relationships between the three entities: Client, Project and Room will allow the interior designer to perform CRUD operations on each entity, as well as query data.
 
