@@ -84,7 +84,7 @@ Unit tests were created for the repositiory and service, to test out the functio
 Use this file path to view the javadocs documentation:
 
 ```
-/interior-design-planner-api/target/reports/apidocs/index.html
+interior-design-planner-api/docs/apidocs/index.html
 
 ./mvnw javadoc:javadoc
 ```
